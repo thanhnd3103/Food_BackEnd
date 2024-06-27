@@ -25,6 +25,7 @@ jobs:
         uses: docker/build-push-action@v2
         with:
           context: .
+          file: ./API/Dockerfile
           push: true
           tags: hinowahimedesu/food_back_end:${{github.sha}}
       - name: Deploy to EC2 instance

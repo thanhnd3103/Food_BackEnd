@@ -28,6 +28,11 @@ jobs:
           file: ./API/Dockerfile
           push: true
           tags: hinowahimedesu/food_back_end:${{github.sha}}
+      - name: Ensure WSL is running
+        run: |
+          wsl --update
+          wsl sudo service docker start
+
       - name: Deploy to EC2 instance
         uses: appleboy/ssh-action@master
         with:
@@ -35,9 +40,9 @@ jobs:
           username: ${{ secrets.USERNAME }}
           key: ${{ secrets.EC2_SSH_KEY }}
           script: |
-            docker stop food_back_end || true
-            docker rm food_back_end || true
-            docker pull ${{secrets.DOCKER_USERNAME}}/food_back_end:${{github.sha}}
-            docker run -d --name food_back_end -p 8000:80 ${{secrets.DOCKER_USERNAME}}/food_back_end:${{github.sha}}
+            wsl --exec /bin/bash -c "docker stop food_back_end || true"
+            wsl --exec /bin/bash -c "docker rm food_back_end || true"
+            wsl --exec /bin/bash -c "docker pull ${{secrets.DOCKER_USERNAME}}/food_back_end:${{github.sha}}"
+            wsl --exec /bin/bash -c "docker run -d --name food_back_end -p 8000:80 ${{secrets.DOCKER_USERNAME}}/food_back_end:${{github.sha}}"
             
         

@@ -13,11 +13,9 @@ namespace DAL.Entities
         [Required]
         public string Name { get; set; }
         [Required]
-        public string Price { get; set; }
+        public decimal Price { get; set; }
         [Required]
         public string ImageUrl { get; set; }
-        [Required]
-        public bool Status { get; set; }
 
         public virtual ICollection<DishTag> DishTags { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

@@ -16,7 +16,7 @@ namespace DAL.Repositories.Implementations
         }
 
         //EXAMPLE ORDERBY : orderBy: q => q.OrderBy(d => d.Name)
-        public virtual IEnumerable<TEntity> Get(
+        public virtual IQueryable<TEntity> Get(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             int? skipCount = 0,
@@ -48,7 +48,7 @@ namespace DAL.Repositories.Implementations
             {
                 query.Take(takeCount.Value);
             }
-            return query.ToList();
+            return query;
         }
 
         public virtual TEntity? GetByID(object id)
@@ -56,9 +56,10 @@ namespace DAL.Repositories.Implementations
             return dbSet.Find(id);
         }
 
-        public virtual void Insert(TEntity entity)
+        public virtual TEntity Insert(TEntity entity)
         {
             dbSet.Add(entity);
+            return entity;
         }
 
         public virtual void Delete(object id)
@@ -79,10 +80,11 @@ namespace DAL.Repositories.Implementations
             dbSet.Remove(entityToDelete);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual TEntity Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
+            return entityToUpdate;
         }
     }
 }

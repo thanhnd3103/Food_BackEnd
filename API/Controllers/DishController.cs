@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace API.Controllers;
 
 [ApiController]
+[Route("/api")]
 public class DishController : ControllerBase
 {
     private readonly IDishService _dishService;
@@ -20,4 +21,10 @@ public class DishController : ControllerBase
         var response = _dishService.GetDishes(getDishesRequest);
         return response;
     }
+
+    // [HttpPost("/dishes")]
+    // public ActionResult<object> CreateDish([FromBody] CreateDishRequest createDishRequest)
+    // {
+    //     
+    // }
 }

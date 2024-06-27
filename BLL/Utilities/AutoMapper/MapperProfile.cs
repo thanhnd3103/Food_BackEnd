@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using Common.RequestObjects.AuthController;
+using Common.RequestObjects.Dish;
 using DAL.Entities;
 
 namespace BLL.Utilities.AutoMapper
@@ -14,6 +15,7 @@ namespace BLL.Utilities.AutoMapper
                             src => src.MapFrom(x => BCrypt.Net.BCrypt.HashPassword(x.Password)));
 
             CreateMap<Account, RegisterRequest>();
+            CreateMap<CreateDishRequest, Dish>();
         }
     }
 }

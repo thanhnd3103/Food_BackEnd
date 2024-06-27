@@ -1,4 +1,5 @@
 using System.Net;
+using AutoMapper;
 using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.RequestObjects.Dish;
@@ -12,10 +13,12 @@ namespace BLL.Services.Implementation;
 public class DishService : IDishService
 {
     private readonly IUnitOfWork _unitOfWork;
+    private readonly IMapper _mapper;
 
-    public DishService(IUnitOfWork unitOfWork)
+    public DishService(IUnitOfWork unitOfWork, IMapper mapper)
     {
         _unitOfWork = unitOfWork;
+        _mapper = mapper;
     }
     
     public ResponseObject GetDishes(GetDishesRequest getDishesRequest)
@@ -79,7 +82,21 @@ public class DishService : IDishService
 
     public ResponseObject CreateDish(CreateDishRequest createDishRequest)
     {
-        throw new NotImplementedException();
+        var dishCheckDuplicated = _unitOfWork.DishRepository
+            .Get(filter: dish => dish.Name.ToLower().Equals(createDishRequest.Name.ToLower()))
+            .FirstOrDefault();
+        if (dishCheckDuplicated != null)
+            return new ResponseObject()
+            {
+
+            };
+        var dish = _mapper.Map<Dish>(createDishRequest);
+        _unitOfWork.DishRepository.Insert(dish);
+        _unitOfWork.Save();
+        return new ResponseObject()
+        {
+
+        };
     }
 
     private IList<Dish> searchAllActive(IQueryable<Dish> queryable)

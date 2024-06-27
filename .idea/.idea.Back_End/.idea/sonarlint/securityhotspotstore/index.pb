@@ -63,3 +63,5 @@ Z
 *BLL/Services/Implementation/DishService.cs,3\4\34266b88adefd5c2d483a9dc6305499b3e288ecf
 ^
 .Common/RequestObjects/Dish/GetDishesRequest.cs,2\a\2a7ed892a67c565f9f1c38804dc06b17f7ba061a
+_
+/Common/RequestObjects/Dish/CreateDishRequest.cs,5\9\5989d90939248901caae3fbf7261f38b8ed20078

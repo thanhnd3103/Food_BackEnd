@@ -56,9 +56,10 @@ namespace DAL.Repositories.Implementations
             return dbSet.Find(id);
         }
 
-        public virtual void Insert(TEntity entity)
+        public virtual TEntity Insert(TEntity entity)
         {
             dbSet.Add(entity);
+            return entity;
         }
 
         public virtual void Delete(object id)
@@ -79,10 +80,11 @@ namespace DAL.Repositories.Implementations
             dbSet.Remove(entityToDelete);
         }
 
-        public virtual void Update(TEntity entityToUpdate)
+        public virtual TEntity Update(TEntity entityToUpdate)
         {
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
+            return entityToUpdate;
         }
     }
 }

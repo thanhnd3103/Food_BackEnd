@@ -6,7 +6,7 @@ namespace DAL
 {
     public class MyDBContext : DbContext
     {
-        public MyDBContext()
+        public MyDBContext() : base()
         {
 
         }

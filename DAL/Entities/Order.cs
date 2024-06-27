@@ -9,7 +9,7 @@ namespace DAL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid OrderID { get; set; }
+        public int OrderID { get; set; }
         [Required]
         public DateTime BookingTime { get; set; }
         [Required]
@@ -18,9 +18,9 @@ namespace DAL.Entities
         public bool Status { get; set; }
         [Required]
         [ForeignKey(nameof(Account))]
-        public Guid AccountID { get; set; }
+        public int AccountID { get; set; }
         [ForeignKey(nameof(Transaction))]
-        public Guid TransactionID { get; set; }
+        public int TransactionID { get; set; }
         public virtual Account Account { get; set; }
         public virtual Transaction Transaction { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

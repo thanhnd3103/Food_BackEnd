@@ -8,13 +8,13 @@ namespace DAL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid OrderDetailID { get; set; }
+        public int OrderDetailID { get; set; }
         [Required]
         [ForeignKey(nameof(Dish))]
-        public Guid DishID { get; set; }
+        public int DishID { get; set; }
         [Required]
         [ForeignKey(nameof(Order))]
-        public Guid OrderID { get; set; }
+        public int OrderID { get; set; }
         [Required]
         public int Quantity { get; set; }
         [Required]

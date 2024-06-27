@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-    
+
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
@@ -55,7 +55,7 @@ builder.Services.AddAuthentication(x =>
 builder.Services.AddAuthorization();
 
 var connectionString = builder.Configuration.GetConnectionString("LocalDBConnection");
-builder.Services.AddDbContext<MyDBContext>(options => options.UseSqlServer(connectionString));
+builder.Services.AddDbContext<MyDBContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddSingleton<IJWTHelper, JWTHelper>();
 

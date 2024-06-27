@@ -5,7 +5,7 @@ name: Push-to-EC2
 on:
   push:
     branches:
-      - main
+      - master
 
 jobs:
   deploy:

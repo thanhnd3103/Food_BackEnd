@@ -27,7 +27,7 @@ builder.Services.AddSwaggerGen(options =>
         Name = "Authorization",
         Type = SecuritySchemeType.ApiKey
     });
-
+    
     options.OperationFilter<SecurityRequirementsOperationFilter>();
 });
 
@@ -61,6 +61,7 @@ builder.Services.AddSingleton<IJWTHelper, JWTHelper>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
+builder.Services.AddScoped<IDishService, DishService>();
 
 var app = builder.Build();
 

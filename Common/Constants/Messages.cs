@@ -19,5 +19,10 @@
 
             public const string LOGIN_SUCCESS = "Đăng nhập thành công";
         }
+
+        public static class DishMessage
+        {
+            public const string List_Dishes_Message_Success = "Một dãy các món ăn";
+        }
     }
 }

@@ -38,6 +38,6 @@ jobs:
             docker stop food_back_end || true
             docker rm food_back_end || true
             docker pull ${{ secrets.DOCKER_USERNAME }}/food_back_end:${{ github.sha }}
-            docker run -d --name food_back_end -p 8000:80 ${{ secrets.DOCKER_USERNAME }}/food_back_end:${{ github.sha }}
+            docker run -u root -d --name food_back_end -p 8000:80 ${{ secrets.DOCKER_USERNAME }}/food_back_end:${{ github.sha }}
             
         

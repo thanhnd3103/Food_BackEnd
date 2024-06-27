@@ -11,7 +11,7 @@ namespace DAL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid AccountID { get; set; }
+        public int AccountID { get; set; }
 
         [Required]
         public string Email { get; set; }

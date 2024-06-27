@@ -9,7 +9,7 @@ namespace DAL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid DishID { get; set; }
+        public int DishID { get; set; }
         [Required]
         public string Name { get; set; }
         [Required]

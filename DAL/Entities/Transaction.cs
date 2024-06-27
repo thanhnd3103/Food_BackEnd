@@ -9,7 +9,7 @@ namespace DAL.Entities
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public Guid TransactionID { get; set; }
+        public int TransactionID { get; set; }
 
         [Required]
         public double TotalPrice { get; set; }

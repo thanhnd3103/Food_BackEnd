@@ -3,6 +3,7 @@ using System;
 using DAL;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
@@ -11,9 +12,11 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    partial class MyDBContextModelSnapshot : ModelSnapshot
+    [Migration("20240627152402_removeStatus")]
+    partial class removeStatus
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -139,9 +142,15 @@ namespace DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
+                    b.Property<int>("TransactionID")
+                        .HasColumnType("integer");
+
                     b.HasKey("OrderID");
 
                     b.HasIndex("AccountID");
+
+                    b.HasIndex("TransactionID")
+                        .IsUnique();
 
                     b.ToTable("Orders");
                 });
@@ -212,9 +221,6 @@ namespace DAL.Migrations
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("boolean");
 
-                    b.Property<int>("OrderID")
-                        .HasColumnType("integer");
-
                     b.Property<bool>("Status")
                         .HasColumnType("boolean");
 
@@ -225,9 +231,6 @@ namespace DAL.Migrations
                         .HasColumnType("timestamp with time zone");
 
                     b.HasKey("TransactionID");
-
-                    b.HasIndex("OrderID")
-                        .IsUnique();
 
                     b.ToTable("Transactions");
                 });
@@ -259,7 +262,15 @@ namespace DAL.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
+                    b.HasOne("DAL.Entities.Transaction", "Transaction")
+                        .WithOne("Order")
+                        .HasForeignKey("DAL.Entities.Order", "TransactionID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
                     b.Navigation("Account");
+
+                    b.Navigation("Transaction");
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
@@ -281,17 +292,6 @@ namespace DAL.Migrations
                     b.Navigation("Order");
                 });
 
-            modelBuilder.Entity("DAL.Entities.Transaction", b =>
-                {
-                    b.HasOne("DAL.Entities.Order", "Order")
-                        .WithOne("Transaction")
-                        .HasForeignKey("DAL.Entities.Transaction", "OrderID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Order");
-                });
-
             modelBuilder.Entity("DAL.Entities.Account", b =>
                 {
                     b.Navigation("Orders");
@@ -307,14 +307,17 @@ namespace DAL.Migrations
             modelBuilder.Entity("DAL.Entities.Order", b =>
                 {
                     b.Navigation("OrderDetails");
-
-                    b.Navigation("Transaction")
-                        .IsRequired();
                 });
 
             modelBuilder.Entity("DAL.Entities.Tag", b =>
                 {
                     b.Navigation("DishTags");
+                });
+
+            modelBuilder.Entity("DAL.Entities.Transaction", b =>
+                {
+                    b.Navigation("Order")
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

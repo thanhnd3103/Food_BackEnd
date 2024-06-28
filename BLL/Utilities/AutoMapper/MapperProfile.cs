@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Common.RequestObjects.AuthController;
 using Common.RequestObjects.Dish;
+using Common.ResponseObjects.Dish;
 using DAL.Entities;
 
 namespace BLL.Utilities.AutoMapper
@@ -16,6 +17,7 @@ namespace BLL.Utilities.AutoMapper
 
             CreateMap<Account, RegisterRequest>();
             CreateMap<CreateDishRequest, Dish>();
+            CreateMap<Dish, DishResponse>();
         }
     }
 }

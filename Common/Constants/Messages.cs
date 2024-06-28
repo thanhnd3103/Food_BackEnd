@@ -18,11 +18,18 @@
             public const string LOGIN_FAILED = "Nhập sai tài khoản hay mật khẩu";
 
             public const string LOGIN_SUCCESS = "Đăng nhập thành công";
+            public const string LOGIN_INTERNAL_ERROR = "Không tìm thấy tài khoản đã đăng nhập";
         }
 
         public static class DishMessage
         {
-            public const string List_Dishes_Message_Success = "Một dãy các món ăn";
+            public const string LIST_DISHES_MESSAGE_SUCCESS = "Một dãy các món ăn";
+            public const string CREATE_DISH_MESSAGE_SUCCESS = "Món ăn được tạo thành công";
+        }
+
+        public static class OrderMessage
+        {
+            public const string PASS_WRONG_ID = "Truyền Id sai";
         }
     }
 }

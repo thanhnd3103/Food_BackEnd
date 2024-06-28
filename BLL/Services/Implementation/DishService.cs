@@ -34,7 +34,7 @@ public class DishService : IDishService
             {
                 Result = response,
                 StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.List_Dishes_Message_Success
+                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
             };
         }
         
@@ -45,7 +45,7 @@ public class DishService : IDishService
             {
                 Result = response,
                 StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.List_Dishes_Message_Success
+                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
             };
         }
         
@@ -56,7 +56,7 @@ public class DishService : IDishService
             {
                 Result = response,
                 StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.List_Dishes_Message_Success
+                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
             };
         }
         
@@ -67,7 +67,7 @@ public class DishService : IDishService
             {
                 Result = response,
                 StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.List_Dishes_Message_Success
+                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
             };
         }
 
@@ -75,7 +75,7 @@ public class DishService : IDishService
         return new ResponseObject()
         {
             Result = response,
-            Message = Messages.DishMessage.List_Dishes_Message_Success,
+            Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS,
             StatusCode = HttpStatusCode.OK
         };
     }
@@ -91,11 +91,13 @@ public class DishService : IDishService
 
             };
         var dish = _mapper.Map<Dish>(createDishRequest);
-        _unitOfWork.DishRepository.Insert(dish);
+        var response = _unitOfWork.DishRepository.Insert(dish);
         _unitOfWork.Save();
         return new ResponseObject()
         {
-
+            Result = response,
+            Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS,
+            StatusCode = HttpStatusCode.OK
         };
     }
 

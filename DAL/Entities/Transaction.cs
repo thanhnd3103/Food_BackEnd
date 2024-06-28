@@ -17,6 +17,9 @@ namespace DAL.Entities
         public bool Status { get; set; }
         [Required]
         public DateTime TransactionDate { get; set; }
+        
+        [ForeignKey(nameof(Transaction))]
+        public int OrderID { get; set; }
 
         public virtual Order Order { get; set; }
 

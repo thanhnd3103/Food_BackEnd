@@ -15,12 +15,8 @@ namespace DAL.Entities
         [Required]
         public decimal BookingPrice { get; set; }
         [Required]
-        public bool Status { get; set; }
-        [Required]
         [ForeignKey(nameof(Account))]
         public int AccountID { get; set; }
-        [ForeignKey(nameof(Transaction))]
-        public int TransactionID { get; set; }
         public virtual Account Account { get; set; }
         public virtual Transaction Transaction { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

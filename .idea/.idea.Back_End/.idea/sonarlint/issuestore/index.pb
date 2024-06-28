@@ -65,3 +65,17 @@ Z
 .Common/RequestObjects/Dish/GetDishesRequest.cs,2\a\2a7ed892a67c565f9f1c38804dc06b17f7ba061a
 _
 /Common/RequestObjects/Dish/CreateDishRequest.cs,5\9\5989d90939248901caae3fbf7261f38b8ed20078
+E
+DAL/Entities/Order.cs,4\f\4f4a948237d2e9125086a3766ea70a0c1ea645b8
+U
+%BLL/Utilities/JWTHelper/IJWTHelper.cs,7\0\7029f19c3f80926301aadcbff3dc27e40941caa4
+T
+$BLL/Utilities/JWTHelper/JWTHelper.cs,2\8\28478a78b5431a4812c3198b696361d86b0c9d8f
+Z
+*Common/LoginAccount/CurrentLoginAccount.cs,a\f\af9d86bf4b96e5d72d57d4bf2b82c0a4d9ff7cf5
+e
+5Common/LoginAccount/Interface/ICurrentLoginAccount.cs,3\e\3efa5d577493b5644269992ae5cf7346448819f7
+R
+"API/Controllers/OrderController.cs,6\d\6de0f653784aa663e99aec4514bfb4c41658f108
+[
++BLL/Services/Implementation/OrderService.cs,d\2\d27982cfd778bcd4b0b715c547d2c8913921282d

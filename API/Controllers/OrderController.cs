@@ -1,10 +1,9 @@
-using System.Net;
 using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.RequestObjects.Order;
 using Common.ResponseObjects;
-using DAL.Repositories;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers;
 

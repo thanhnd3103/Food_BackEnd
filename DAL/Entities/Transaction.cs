@@ -1,6 +1,7 @@
 ﻿using DAL.Entities.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Transactions;
 
 namespace DAL.Entities
 {
@@ -11,10 +12,13 @@ namespace DAL.Entities
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int TransactionID { get; set; }
 
+        public string? BankCode { get; set; }
+        public int? Txn_ref { get; set; }
+        
         [Required]
         public double TotalPrice { get; set; }
         [Required]
-        public bool Status { get; set; }
+        public TransactionStatus Status { get; set; }
         [Required]
         public DateTime TransactionDate { get; set; }
         

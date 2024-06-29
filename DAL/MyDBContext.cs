@@ -51,6 +51,13 @@ namespace DAL
                 .WithMany(i => i.DishTags)
                 .HasForeignKey(i => i.DishID)
                 .OnDelete(DeleteBehavior.NoAction);
+            
+            // modelBuilder
+            //     .Entity<Rider>()
+            //     .Property(e => e.Mount)
+            //     .HasConversion(
+            //         v => v.ToString(),
+            //         v => (EquineBeast)Enum.Parse(typeof(EquineBeast), v));
         }
     }
 }

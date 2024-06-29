@@ -1,4 +1,5 @@
-﻿using DAL.Repositories.Interfaces;
+﻿using System.Data;
+using DAL.Repositories.Interfaces;
 
 namespace DAL.Repositories
 {
@@ -13,6 +14,7 @@ namespace DAL.Repositories
         ITransactionRepository? TransactionRepository { get; }
         void Save();
         void Dispose();
+        IDbTransaction BeginTransaction();
     }
 
 }

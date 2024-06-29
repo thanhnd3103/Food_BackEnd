@@ -79,3 +79,15 @@ R
 "API/Controllers/OrderController.cs,6\d\6de0f653784aa663e99aec4514bfb4c41658f108
 [
 +BLL/Services/Implementation/OrderService.cs,d\2\d27982cfd778bcd4b0b715c547d2c8913921282d
+[
++Common/RequestObjects/Order/OrderRequest.cs,9\6\96c92a6c26dca2403b3a0bc1c8d7bd8945c59e08
+K
+DAL/Entities/Transaction.cs,b\3\b3f2e5eb8f0e89eda5edc5fdfdeb34d46d0b419e
+d
+4Common/RequestObjects/AuthController/LoginRequest.cs,9\7\973376ea9e6c19a38b1c9efcdf4290e798bc31e8
+B
+DAL/MyDBContext.cs,f\a\fa0b534911e9ba375ee633a33e0137f3aea0a371
+[
++Common/ResponseObjects/Dish/DishResponse.cs,4\d\4dad029afc21d06d256001f6cc331ebd3806615c
+R
+"Common/Status/TransactionStatus.cs,e\5\e54f1ceb596c5d91b0f627592170d4b3147616e0

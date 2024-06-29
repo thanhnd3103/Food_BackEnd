@@ -65,6 +65,38 @@
 //             IsDeleted = false,
 //             BookingTime = DateTime.Now
 //         };
-//         
+//         // transaction 
+//         using var transaction = _unitOfWork.BeginTransaction();
+//         try
+//         {
+//             var orderCreated = _unitOfWork.OrderRepository.Insert(order);
+//             _unitOfWork.Save();
+//             foreach (var dish in request.Dishes)
+//             {
+//                 var dishCheck = _unitOfWork.DishRepository.
+//                     Get(x => x.DishID == dish.DishId).FirstOrDefault();
+//                 if (dishCheck is null)
+//                     return new ResponseObject()
+//                     {
+//                         Result = null,
+//                         Message = Messages.OrderMessage.PASS_WRONG_ID,
+//                         StatusCode = HttpStatusCode.BadRequest
+//                     };
+//                 var orderDetail = new OrderDetail()
+//                 {
+//                     DishID = dishCheck.DishID,
+//                     Price = dishCheck.Price,
+//                     Quantity = dish.Quantity,
+//                     OrderID = orderCreated.OrderID
+//                 };
+//                 var orderDetailCreated = _unitOfWork.OrderDetailRepository.Insert(orderDetail);
+//                 _unitOfWork.Save();
+//             }
+//             transaction.Commit();
+//         }
+//         catch (Exception e)
+//         {
+//             transaction.Rollback();
+//         }
 //     }
 // }

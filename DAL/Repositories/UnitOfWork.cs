@@ -1,5 +1,7 @@
-﻿using DAL.Repositories.Implementations;
+﻿using System.Data;
+using DAL.Repositories.Implementations;
 using DAL.Repositories.Interfaces;
+using Microsoft.EntityFrameworkCore.Storage;
 
 namespace DAL.Repositories
 {
@@ -127,6 +129,12 @@ namespace DAL.Repositories
         {
             Dispose(true);
             GC.SuppressFinalize(this);
+        }
+
+        public IDbTransaction BeginTransaction()
+        {
+            var transaction = context.Database.BeginTransaction();
+            return transaction.GetDbTransaction();
         }
     }
 }

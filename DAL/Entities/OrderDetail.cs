@@ -18,7 +18,7 @@ namespace DAL.Entities
         [Required]
         public int Quantity { get; set; }
         [Required]
-        public double Price { get; set; }
+        public decimal Price { get; set; }
 
         public virtual Order Order { get; set; }
         public virtual Dish Dish { get; set; }

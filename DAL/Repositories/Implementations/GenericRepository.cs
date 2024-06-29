@@ -86,5 +86,13 @@ namespace DAL.Repositories.Implementations
             context.Entry(entityToUpdate).State = EntityState.Modified;
             return entityToUpdate;
         }
+
+        public async Task BulkInsertAsync(IEnumerable<TEntity> entities)
+        {
+            using (var context = new MyDBContext())
+            {
+                await context.AddRangeAsync(entities);
+            }
+        }
     }
 }

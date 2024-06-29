@@ -6,6 +6,7 @@
         {
             public const string CRITICAL_UNIDENTIFIED_ERROR = "Lỗi không xác định";
             public const string MODEL_STATE_INVALID = "Nhập thiếu hoặc sai định dạng dữ liệu, vui lòng kiểm tra kết quả trả về";
+            public const string NO_DATA_ERROR = "Không có dữ liệu trùng khớp";
         }
 
         public static class AuthController
@@ -25,6 +26,8 @@
         {
             public const string LIST_DISHES_MESSAGE_SUCCESS = "Một dãy các món ăn";
             public const string CREATE_DISH_MESSAGE_SUCCESS = "Món ăn được tạo thành công";
+            public const string GET_DISH_SUCCESS = "Lấy món ăn thành công";
+            public const string NO_CONTENT = "Không có món ăn thuộc tag này, hoặc tag không tồn tại";
         }
 
         public static class OrderMessage

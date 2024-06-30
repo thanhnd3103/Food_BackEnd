@@ -4,7 +4,7 @@ namespace DAL.Repositories.Interfaces
 {
     public interface IGenericRepository<TEntity> where TEntity : class
     {
-        IQueryable<TEntity> Get(
+        IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             int? skipCount = 0,

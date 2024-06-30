@@ -4,7 +4,7 @@ using Microsoft.EntityFrameworkCore.Diagnostics;
 
 namespace DAL.Interceptors
 {
-    public class SoftDeleteInterceptor : SaveChangesInterceptor
+    public class InsertInterceptor : SaveChangesInterceptor
     {
         public override InterceptionResult<int> SavingChanges(
             DbContextEventData eventData,
@@ -14,13 +14,10 @@ namespace DAL.Interceptors
 
             foreach (var entry in eventData.Context.ChangeTracker.Entries())
             {
-                if (entry is not { State: EntityState.Deleted, Entity: ISoftDelete delete }) continue;
-                entry.State = EntityState.Modified;
-                delete.IsDeleted = true;
-                delete.DeletedAt = DateTime.Now;
+                if (entry is not { State: EntityState.Deleted, Entity: ISoftDelete create }) continue;
+                create.IsDeleted = false;
             }
             return result;
         }
     }
-
 }

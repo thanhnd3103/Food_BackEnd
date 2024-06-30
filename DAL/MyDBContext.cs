@@ -28,7 +28,7 @@ namespace DAL
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.AddInterceptors(new SoftDeleteInterceptor());
+            => optionsBuilder.AddInterceptors(new SoftDeleteInterceptor(), new InsertInterceptor());
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,12 +55,12 @@ namespace DAL
                 .WithMany(i => i.DishTags)
                 .HasForeignKey(i => i.DishID)
                 .OnDelete(DeleteBehavior.NoAction);
-            
+
             modelBuilder
                 .Entity<Transaction>()
                 .Property(e => e.Status)
                 .HasConversion(new EnumToStringConverter<TransactionHistoryStatus>());
-            
+
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {
                 foreach (var property in entityType.GetProperties())

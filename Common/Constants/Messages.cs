@@ -26,8 +26,11 @@
         {
             public const string LIST_DISHES_MESSAGE_SUCCESS = "Một dãy các món ăn";
             public const string CREATE_DISH_MESSAGE_SUCCESS = "Món ăn được tạo thành công";
+            public const string CREATE_DISH_MESSAGE_SUCCESS_NO_TAG = "Món ăn được tạo thành công, nhưng không có tag";
             public const string GET_DISH_SUCCESS = "Lấy món ăn thành công";
             public const string NO_CONTENT = "Không có món ăn thuộc tag này, hoặc tag không tồn tại";
+            public const string DUPLICATED_DISH = "Món ăn đã tồn tại";
+            public const string INVALID_TAG = "Chứa tag không hợp lệ";
         }
 
         public static class OrderMessage
@@ -35,7 +38,7 @@
             public const string PASS_WRONG_ID = "Truyền Id sai";
             public const string ORDER_SUCCESS = "Tạo order thành công";
         }
-        
+
         public static class AccountMessage
         {
             public const string GET_ACCOUNT_BY_ID_SUCCESS = "Trả về dữ liệu của người dùng thnh công";

@@ -1,16 +1,18 @@
+using Amazon.S3;
 using BLL.Services.Implementation;
 using BLL.Services.Interfaces;
 using BLL.Utilities.AutoMapper;
+using BLL.Utilities.AWSHelper;
 using BLL.Utilities.JWTHelper;
+using BLL.Utilities.LoginAccount;
+using BLL.Utilities.LoginAccount.Interface;
 using DAL;
 using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System.Text;
-using BLL.Utilities.LoginAccount;
-using BLL.Utilities.LoginAccount.Interface;
-using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
@@ -58,6 +60,9 @@ builder.Services.AddSwaggerGen(option =>
     });
 });
 
+builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+builder.Services.AddAWSService<IAmazonS3>();
+
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
 
 builder.Services.AddAuthentication(x =>
@@ -85,6 +90,7 @@ var connectionString = builder.Configuration.GetConnectionString("LocalDBConnect
 builder.Services.AddDbContext<MyDBContext>(options => options.UseNpgsql(connectionString));
 
 builder.Services.AddSingleton<IJWTHelper, JWTHelper>();
+builder.Services.AddSingleton<IAWSHelper, AWSHelper>();
 
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
@@ -92,9 +98,11 @@ builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICurrentLoginAccount, CurrentLoginAccount>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+
 app.UseSwagger();
 app.UseSwaggerUI();
 

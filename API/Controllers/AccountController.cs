@@ -1,9 +1,10 @@
 using BLL.Services.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
-[Route("/api")]
+[Route("/api/[controller]")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -14,7 +15,8 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
-    [HttpGet("/accounts/{accountId}")]
+    [HttpGet("/{accountId}")]
+    [Authorize]
     public ActionResult<object> GetAccountById(int accountId)
     {
         var response = _accountService.GetAccountById(accountId);

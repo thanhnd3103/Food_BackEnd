@@ -1,4 +1,5 @@
 ﻿using Common.Status;
+using Common.Utils;
 using DAL.Entities;
 using DAL.Interceptors;
 using Microsoft.EntityFrameworkCore;
@@ -59,6 +60,30 @@ namespace DAL
                 .Entity<Transaction>()
                 .Property(e => e.Status)
                 .HasConversion(new EnumToStringConverter<TransactionHistoryStatus>());
+            
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(new ValueConverter<DateTime, DateTime>(
+                            v => v.SetKindUtc(),
+                            v => v.SetKindUtc()
+                        ));
+                    }
+
+                    if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(new ValueConverter<DateTime?, DateTime?>(
+                            v => v.SetKindUtc(),
+                            v => v.SetKindUtc()
+                        ));
+                    }
+                }
+            }
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

@@ -8,6 +8,7 @@ using Common.ResponseObjects;
 using Common.ResponseObjects.Dish;
 using Common.ResponseObjects.Order;
 using Common.Status;
+using Common.Utils;
 using DAL.Entities;
 using DAL.Repositories;
 using Transaction = DAL.Entities.Transaction;
@@ -67,7 +68,7 @@ public class OrderService : IOrderService
             AccountID = int.Parse(userId),
             BookingPrice = totalPrice,
             IsDeleted = false,
-            BookingTime = DateTime.Now
+            BookingTime = DateTime.Now.SetKindUtc()
         };
         // transaction 
         using var transaction = _unitOfWork.BeginTransaction();

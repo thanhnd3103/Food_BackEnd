@@ -1,6 +1,7 @@
 ﻿using AutoMapper;
 using Common.RequestObjects.AuthController;
 using Common.RequestObjects.Dish;
+using Common.ResponseObjects.Account;
 using Common.ResponseObjects.Dish;
 using Common.ResponseObjects.Order;
 using DAL.Entities;
@@ -21,6 +22,7 @@ namespace BLL.Utilities.AutoMapper
             CreateMap<Dish, DishResponse>();
             CreateMap<Order, OrderResponse>()
                         .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));
+            CreateMap<Account, AccountResponse>();
         }
     }
 }

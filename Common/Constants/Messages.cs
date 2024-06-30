@@ -35,5 +35,10 @@
             public const string PASS_WRONG_ID = "Truyền Id sai";
             public const string ORDER_SUCCESS = "Tạo order thành công";
         }
+        
+        public static class AccountMessage
+        {
+            public const string GET_ACCOUNT_BY_ID_SUCCESS = "Trả về dữ liệu của người dùng thnh công";
+        }
     }
 }

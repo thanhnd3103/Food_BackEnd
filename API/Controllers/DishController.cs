@@ -58,9 +58,4 @@ public class DishController : ControllerBase
         }
         return _dishService.CreateDish(createDishRequest);
     }
-    [HttpPut("test")]
-    public IActionResult Hello(IFormFile yada)
-    {
-        return Ok();
-    }
 }

@@ -1,14 +1,16 @@
 ﻿using AutoMapper;
 using BLL.Services.Interfaces;
+using BLL.Utilities.ExpressionExtensions;
 using Common.Constants;
 using Common.Enums;
 using Common.RequestObjects.Dish;
 using Common.ResponseObjects;
 using Common.ResponseObjects.Dish;
-using Common.Status;
+using Common.ResponseObjects.Pagination;
 using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.IdentityModel.Tokens;
+using System.Linq.Expressions;
 using System.Net;
 
 namespace BLL.Services.Implementation;
@@ -68,63 +70,53 @@ public class DishService : IDishService
     {
         IList<DishResponse> response = new List<DishResponse>();
         IList<Dish> dishes = new List<Dish>();
-        var getDishes = _unitOfWork.DishRepository.Get()
-            .Skip((getDishesRequest.PageNumber - 1) * getDishesRequest.PageSize)
-            .Take(getDishesRequest.PageSize);
-        if (getDishesRequest.Status == ModelStatus.ACTIVE)
+
+        // Build the filter expression
+        Expression<Func<Dish, bool>>? filter = null;
+        if (getDishesRequest.Status.HasValue)
         {
-            dishes = searchAllActive(getDishes).ToList();
-            response = _mapper.Map<List<DishResponse>>(dishes);
-            return new ResponseObject
-            {
-                Result = response,
-                StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
-            };
+            filter = dish =>
+                dish.IsDeleted == (getDishesRequest.Status.Value == Common.Status.ModelStatus.INACTIVE);
+        }
+        if (!string.IsNullOrEmpty(getDishesRequest.Name))
+        {
+            filter = filter == null
+                ? dish => dish.Name.Contains(getDishesRequest.Name)
+                : filter.And(dish => dish.Name.Contains(getDishesRequest.Name));
+        }
+        if (getDishesRequest.MaxPrice.HasValue)
+        {
+            filter = filter == null
+                ? dish => dish.Price <= getDishesRequest.MaxPrice.Value
+                : filter.And(dish => dish.Price <= getDishesRequest.MaxPrice.Value);
+        }
+        if (getDishesRequest.MinPrice.HasValue)
+        {
+            filter = filter == null
+                ? dish => dish.Price >= getDishesRequest.MinPrice.Value
+                : filter.And(dish => dish.Price >= getDishesRequest.MinPrice.Value);
         }
 
-        if (getDishesRequest.Status == ModelStatus.INACTIVE)
-        {
-            dishes = searchAllInActive(getDishes).ToList();
-            response = _mapper.Map<List<DishResponse>>(dishes);
-            return new ResponseObject
-            {
-                Result = response,
-                StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
-            };
-        }
+        // Call the Get method
+        dishes = _unitOfWork.DishRepository!.Get(
+            filter: filter,
+            skipCount: (getDishesRequest.PageNumber - 1) * getDishesRequest.PageSize,
+            takeCount: getDishesRequest.PageSize
+        ).ToList();
 
-        if (getDishesRequest.Name != null)
-        {
-            dishes = searchAllByName(getDishes, getDishesRequest.Name).ToList();
-            response = _mapper.Map<List<DishResponse>>(dishes);
-            return new ResponseObject
-            {
-                Result = response,
-                StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
-            };
-        }
-
-        if (getDishesRequest.Name != null)
-        {
-            dishes = searchAllByName(getDishes, getDishesRequest.Name).ToList();
-            return new ResponseObject
-            {
-                Result = response,
-                StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
-            };
-        }
-
-        dishes = searchAllInRange(getDishes, getDishesRequest.MinPrice, getDishesRequest.MaxPrice).ToList();
         response = _mapper.Map<List<DishResponse>>(dishes);
-        return new ResponseObject()
+
+        return new ResponseObject
         {
-            Result = response,
-            Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS,
-            StatusCode = HttpStatusCode.OK
+            Result = new PaginationResponse
+            {
+                Items = response,
+                TotalPage = (int)Math.Ceiling((decimal)response.Count() / getDishesRequest.PageSize),
+                PageSize = getDishesRequest.PageSize,
+                PageNumber = getDishesRequest.PageNumber,
+            },
+            StatusCode = HttpStatusCode.OK,
+            Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
         };
     }
 
@@ -136,7 +128,7 @@ public class DishService : IDishService
         if (dishCheckDuplicated != null)
             return new ResponseObject()
             {
-                    
+                Message = "Duplicated dish"
             };
         var dish = _mapper.Map<Dish>(createDishRequest);
         var response = _unitOfWork.DishRepository.Insert(dish);
@@ -147,41 +139,38 @@ public class DishService : IDishService
             Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS,
             StatusCode = HttpStatusCode.OK
         };
-
-
     }
     public ResponseObject RandomDish(Meal meal)
     {
         Tag switchTag;
-        IQueryable<DishTag> dishTagList = Enumerable.Empty<DishTag>().AsQueryable();
+        List<DishTag> dishTagList = new List<DishTag>();
         switch (meal)
         {
             case Meal.Breakfast:
                 switchTag = _unitOfWork.TagRepository!
                     .Get(filter: tag => tag.Name.Contains("sáng") || tag.Name.Contains("Breakfast"))
-                    .ToList().FirstOrDefault()!;
+                    .FirstOrDefault()!;
                 dishTagList = _unitOfWork.DishTagRepository!
-                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID);
+                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID).ToList();
                 break;
             case Meal.Lunch:
                 switchTag = _unitOfWork.TagRepository!
                     .Get(filter: tag => tag.Name.Contains("trưa") || tag.Name.Contains("Lunch"))
                     .ToList().FirstOrDefault()!;
                 dishTagList = _unitOfWork.DishTagRepository!
-                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID);
+                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID).ToList();
                 break;
             case Meal.Dinner:
                 switchTag = _unitOfWork.TagRepository!
                     .Get(filter: tag => tag.Name.Contains("tối") || tag.Name.Contains("Dinner"))
                     .ToList().FirstOrDefault()!;
                 dishTagList = _unitOfWork.DishTagRepository!
-                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID);
+                    .Get(filter: dishTag => dishTag.TagID == switchTag.TagID).ToList();
                 break;
             default:
                 break;
         }
-        var resultList = dishTagList.ToList();
-        if (resultList.IsNullOrEmpty() || resultList.Count == 0)
+        if (dishTagList.IsNullOrEmpty() || dishTagList.Count == 0)
         {
             return new ResponseObject()
             {
@@ -193,8 +182,8 @@ public class DishService : IDishService
         else
         {
             Random random = new Random();
-            int randomNumber = random.Next(0, resultList.Count);
-            Dish resultEntity = _unitOfWork.DishRepository!.GetByID(resultList[randomNumber].DishID)!;
+            int randomNumber = random.Next(0, dishTagList.Count);
+            Dish resultEntity = _unitOfWork.DishRepository!.GetByID(dishTagList[randomNumber].DishID)!;
             return new ResponseObject()
             {
                 StatusCode = HttpStatusCode.OK,
@@ -208,37 +197,5 @@ public class DishService : IDishService
                 },
             };
         }
-    }
-
-    private IList<Dish> searchAllActive(IQueryable<Dish> queryable)
-    {
-        return queryable.Where(x => x.IsDeleted == false).ToList();
-    }
-
-    private IList<Dish> searchAllInActive(IQueryable<Dish> queryable)
-    {
-        return queryable.Where(x => x.IsDeleted == true).ToList();
-    }
-
-    private IList<Dish> searchAllByName(IQueryable<Dish> queryable, string name)
-    {
-        return queryable.Where(x => x.Name.Contains(name)).ToList();
-    }
-
-    private IList<Dish> searchAllInRange(IQueryable<Dish> queryable, decimal? min, decimal? max)
-    {
-        if (min != null && max == null)
-        {
-            return queryable.Where(x => x.Price >= min).ToList();
-        }
-        if (min == null && max != null)
-        {
-            return queryable.Where(x => x.Price <= max && x.Price > 0).ToList();
-        }
-        if (min != null && max != null)
-        {
-            return queryable.Where(x => x.Price <= max && x.Price > min).ToList();
-        }
-        return queryable.ToList();
     }
 }

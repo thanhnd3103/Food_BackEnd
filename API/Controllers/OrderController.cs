@@ -1,9 +1,11 @@
+using System.Net;
+using System.Security.Claims;
 using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.RequestObjects.Order;
 using Common.ResponseObjects;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System.Net;
 
 namespace API.Controllers;
 
@@ -18,7 +20,8 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
-    [HttpPost("/order")]
+    [HttpPost("/order")] 
+    [Authorize]
     public ActionResult<ResponseObject> Order(OrderRequest request)
     {
         if (!ModelState.IsValid)
@@ -28,7 +31,8 @@ public class OrderController : ControllerBase
                 StatusCode = HttpStatusCode.BadRequest,
                 Result = ModelState.Values.SelectMany(v => v.Errors)
             };
-        var response = _orderService.Order(request);
+        var userId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
+        var response = _orderService.Order(request, userId);
         return response;
     }
 }

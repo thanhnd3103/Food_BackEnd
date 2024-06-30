@@ -1,6 +1,6 @@
 namespace Common.Status;
 
-public enum TransactionStatus
+public enum TransactionHistoryStatus
 {
     NOTPAID,
     PAID,

@@ -12,7 +12,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace DAL.Migrations
 {
     [DbContext(typeof(MyDBContext))]
-    [Migration("20240629083435_changeStatusAndAddField")]
+    [Migration("20240629084911_changeStatusAndAddField")]
     partial class changeStatusAndAddField
     {
         /// <inheritdoc />
@@ -221,8 +221,9 @@ namespace DAL.Migrations
                     b.Property<int>("OrderID")
                         .HasColumnType("integer");
 
-                    b.Property<int>("Status")
-                        .HasColumnType("integer");
+                    b.Property<string>("Status")
+                        .IsRequired()
+                        .HasColumnType("text");
 
                     b.Property<double>("TotalPrice")
                         .HasColumnType("double precision");

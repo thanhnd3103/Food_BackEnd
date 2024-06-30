@@ -7,8 +7,9 @@ using DAL.Repositories;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Swashbuckle.AspNetCore.Filters;
 using System.Text;
+using BLL.Utilities.LoginAccount;
+using BLL.Utilities.LoginAccount.Interface;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -19,16 +20,42 @@ var config = builder.Configuration;
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen(options =>
+// builder.Services.AddSwaggerGen(options =>
+// {
+//     options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+//     {
+//         In = ParameterLocation.Header,
+//         Name = "Authorization",
+//         Type = SecuritySchemeType.ApiKey
+//     });
+//
+//     options.OperationFilter<SecurityRequirementsOperationFilter>();
+// });
+builder.Services.AddSwaggerGen(option =>
 {
-    options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+    option.SwaggerDoc("v1", new OpenApiInfo() { Title = "Backend API", Version = "v1" });
+    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
         In = ParameterLocation.Header,
         Name = "Authorization",
-        Type = SecuritySchemeType.ApiKey
+        Type = SecuritySchemeType.Http,
+        BearerFormat = "JWT",
+        Scheme = "Bearer"
     });
-
-    options.OperationFilter<SecurityRequirementsOperationFilter>();
+    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Type=ReferenceType.SecurityScheme,
+                    Id="Bearer"
+                }
+            },
+            new string[]{}
+        }
+    });
 });
 
 builder.Services.AddAutoMapper(typeof(MapperProfile).Assembly);
@@ -62,7 +89,8 @@ builder.Services.AddSingleton<IJWTHelper, JWTHelper>();
 builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 builder.Services.AddScoped<IAuthService, AuthService>();
 builder.Services.AddScoped<IDishService, DishService>();
-
+builder.Services.AddScoped<IOrderService, OrderService>();
+builder.Services.AddScoped<ICurrentLoginAccount, CurrentLoginAccount>();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

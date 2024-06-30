@@ -33,6 +33,7 @@
         public static class OrderMessage
         {
             public const string PASS_WRONG_ID = "Truyền Id sai";
+            public const string ORDER_SUCCESS = "Tạo order thành công";
         }
     }
 }

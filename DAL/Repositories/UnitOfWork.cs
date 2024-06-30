@@ -1,7 +1,7 @@
-﻿using System.Data;
-using DAL.Repositories.Implementations;
+﻿using DAL.Repositories.Implementations;
 using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore.Storage;
+using System.Data;
 
 namespace DAL.Repositories
 {
@@ -106,9 +106,9 @@ namespace DAL.Repositories
             }
         }
 
-        public void Save()
+        public int Save()
         {
-            context.SaveChanges();
+            return context.SaveChanges();
         }
 
         private bool disposed = false;

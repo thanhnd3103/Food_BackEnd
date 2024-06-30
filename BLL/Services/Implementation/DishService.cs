@@ -1,5 +1,6 @@
 ﻿using AutoMapper;
 using BLL.Services.Interfaces;
+using BLL.Utilities.AWSHelper;
 using BLL.Utilities.ExpressionExtensions;
 using Common.Constants;
 using Common.Enums;
@@ -17,14 +18,22 @@ namespace BLL.Services.Implementation;
 
 public class DishService : IDishService
 {
+    #region Properties
     private readonly IUnitOfWork _unitOfWork;
     private readonly IMapper _mapper;
+    private readonly IAWSHelper _awsHelper;
+    #endregion
 
-    public DishService(IUnitOfWork unitOfWork, IMapper mapper)
+    #region Constructer
+    public DishService(IUnitOfWork unitOfWork, IMapper mapper, IAWSHelper awsHelper)
     {
         _unitOfWork = unitOfWork;
         _mapper = mapper;
+        _awsHelper = awsHelper;
     }
+    #endregion
+
+    #region GET METHOD
     public ResponseObject GetDish(int id)
     {
         try
@@ -119,30 +128,9 @@ public class DishService : IDishService
             Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
         };
     }
-
-    public ResponseObject CreateDish(CreateDishRequest createDishRequest)
-    {
-        var dishCheckDuplicated = _unitOfWork.DishRepository
-            .Get(filter: dish => dish.Name.ToLower().Equals(createDishRequest.Name.ToLower()))
-            .FirstOrDefault();
-        if (dishCheckDuplicated != null)
-            return new ResponseObject()
-            {
-                Message = "Duplicated dish"
-            };
-        var dish = _mapper.Map<Dish>(createDishRequest);
-        var response = _unitOfWork.DishRepository.Insert(dish);
-        _unitOfWork.Save();
-        return new ResponseObject()
-        {
-            Result = response,
-            Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS,
-            StatusCode = HttpStatusCode.OK
-        };
-    }
     public ResponseObject RandomDish(Meal meal)
     {
-        Tag switchTag;
+        DAL.Entities.Tag switchTag;
         List<DishTag> dishTagList = new List<DishTag>();
         switch (meal)
         {
@@ -198,4 +186,79 @@ public class DishService : IDishService
             };
         }
     }
+    #endregion
+
+    public ResponseObject CreateDish(CreateDishRequest createDishRequest)
+    {
+        var dishCheckDuplicated = _unitOfWork.DishRepository!
+            .Get(filter: dish => dish.Name.Trim().ToLower().Equals(createDishRequest.Name.Trim().ToLower()))
+            .FirstOrDefault();
+        if (dishCheckDuplicated != null)
+        {
+            return new ResponseObject()
+            {
+                Message = Messages.DishMessage.DUPLICATED_DISH,
+                Result = null,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+
+
+
+
+        (bool isSuccess, string imageUrl) = _awsHelper.UploadImage(createDishRequest.ImageFile);
+
+        if (isSuccess)
+        {
+            var dish = _mapper.Map<Dish>(createDishRequest);
+            dish.ImageUrl = imageUrl;
+
+            var response = _unitOfWork.DishRepository.Insert(dish);
+            //README: Save here to get ID to insert to DishTag
+            _unitOfWork.Save();
+
+            var tagList = _unitOfWork.TagRepository!.Get();
+            foreach (int tagId in createDishRequest.TagList.Distinct().ToArray())
+            {
+                if (tagList.Any(tag => tag.TagID == tagId))
+                {
+                    _unitOfWork.DishTagRepository!.Insert(new DishTag
+                    {
+                        TagID = tagId,
+                        DishID = response.DishID,
+                    });
+                }
+            }
+            if (_unitOfWork.Save() > 0)
+            {
+                return new ResponseObject()
+                {
+                    Result = _mapper.Map<DishResponse>(response),
+                    Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS,
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
+            else
+            {
+                return new ResponseObject()
+                {
+                    Result = _mapper.Map<DishResponse>(response),
+                    Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS_NO_TAG,
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
+
+        }
+        else
+        {
+            return new ResponseObject()
+            {
+                Result = null,
+                Message = Messages.General.CRITICAL_UNIDENTIFIED_ERROR,
+                StatusCode = HttpStatusCode.OK
+            };
+        }
+
+    }
+
 }

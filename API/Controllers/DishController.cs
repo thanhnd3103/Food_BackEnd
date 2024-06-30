@@ -1,13 +1,16 @@
 using BLL.Services.Interfaces;
+using Common.Constants;
 using Common.Enums;
 using Common.RequestObjects.Dish;
+using Common.ResponseObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
 
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api")]
+[Route("/api/[controller]")]
 public class DishController : ControllerBase
 {
     private readonly IDishService _dishService;
@@ -17,7 +20,7 @@ public class DishController : ControllerBase
         _dishService = dishService;
     }
 
-    [HttpGet("/dishes")]
+    [HttpGet("dishes")]
     [Authorize]
     public ActionResult<object> GetDishes([FromQuery] GetDishesRequest getDishesRequest)
     {
@@ -25,14 +28,14 @@ public class DishController : ControllerBase
         return response;
     }
 
-    [HttpGet("/dish/{id}")]
+    [HttpGet("{id}")]
     [Authorize]
     public ActionResult<object> GetDish([FromRoute] int id)
     {
         return _dishService.GetDish(id);
     }
 
-    [HttpGet("/random")]
+    [HttpGet("random")]
     [Authorize]
     public ActionResult<object> RandomDish([FromQuery] Meal meal)
     {
@@ -40,9 +43,24 @@ public class DishController : ControllerBase
     }
 
 
-    // [HttpPost("/dishes")]
-    // public ActionResult<object> CreateDish([FromBody] CreateDishRequest createDishRequest)
-    // {
-    //     
-    // }
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public ActionResult<object> CreateDish(CreateDishRequest createDishRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return new ResponseObject
+            {
+                Message = Messages.General.MODEL_STATE_INVALID,
+                StatusCode = HttpStatusCode.BadRequest,
+                Result = ModelState.Values.SelectMany(v => v.Errors)
+            };
+        }
+        return _dishService.CreateDish(createDishRequest);
+    }
+    [HttpPut("test")]
+    public IActionResult Hello(IFormFile yada)
+    {
+        return Ok();
+    }
 }

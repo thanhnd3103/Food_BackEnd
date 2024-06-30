@@ -1,16 +1,16 @@
-using System.Net;
-using System.Security.Claims;
 using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.RequestObjects.Order;
 using Common.ResponseObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Net;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api")]
+[Route("/api/[controller]")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -20,7 +20,7 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
-    [HttpPost("/order")] 
+    [HttpPost]
     [Authorize]
     public ActionResult<ResponseObject> Order(OrderRequest request)
     {

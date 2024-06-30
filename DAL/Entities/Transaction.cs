@@ -1,7 +1,7 @@
 ﻿using DAL.Entities.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Transactions;
+using Common.Status;
 
 namespace DAL.Entities
 {
@@ -16,9 +16,9 @@ namespace DAL.Entities
         public int? Txn_ref { get; set; }
         
         [Required]
-        public double TotalPrice { get; set; }
+        public decimal TotalPrice { get; set; }
         [Required]
-        public TransactionStatus Status { get; set; }
+        public TransactionHistoryStatus Status { get; set; }
         [Required]
         public DateTime TransactionDate { get; set; }
         

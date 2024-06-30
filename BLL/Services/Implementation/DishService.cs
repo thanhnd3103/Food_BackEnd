@@ -66,13 +66,15 @@ public class DishService : IDishService
     }
     public ResponseObject GetDishes(GetDishesRequest getDishesRequest)
     {
-        IList<Dish> response = new List<Dish>();
+        IList<DishResponse> response = new List<DishResponse>();
+        IList<Dish> dishes = new List<Dish>();
         var getDishes = _unitOfWork.DishRepository.Get()
             .Skip((getDishesRequest.PageNumber - 1) * getDishesRequest.PageSize)
             .Take(getDishesRequest.PageSize);
         if (getDishesRequest.Status == ModelStatus.ACTIVE)
         {
-            response = searchAllActive(getDishes).ToList();
+            dishes = searchAllActive(getDishes).ToList();
+            response = _mapper.Map<List<DishResponse>>(dishes);
             return new ResponseObject
             {
                 Result = response,
@@ -83,7 +85,8 @@ public class DishService : IDishService
 
         if (getDishesRequest.Status == ModelStatus.INACTIVE)
         {
-            response = searchAllInActive(getDishes).ToList();
+            dishes = searchAllInActive(getDishes).ToList();
+            response = _mapper.Map<List<DishResponse>>(dishes);
             return new ResponseObject
             {
                 Result = response,
@@ -94,7 +97,8 @@ public class DishService : IDishService
 
         if (getDishesRequest.Name != null)
         {
-            response = searchAllByName(getDishes, getDishesRequest.Name).ToList();
+            dishes = searchAllByName(getDishes, getDishesRequest.Name).ToList();
+            response = _mapper.Map<List<DishResponse>>(dishes);
             return new ResponseObject
             {
                 Result = response,
@@ -105,7 +109,7 @@ public class DishService : IDishService
 
         if (getDishesRequest.Name != null)
         {
-            response = searchAllByName(getDishes, getDishesRequest.Name).ToList();
+            dishes = searchAllByName(getDishes, getDishesRequest.Name).ToList();
             return new ResponseObject
             {
                 Result = response,
@@ -114,7 +118,8 @@ public class DishService : IDishService
             };
         }
 
-        response = searchAllInRange(getDishes, getDishesRequest.MinPrice, getDishesRequest.MaxPrice).ToList();
+        dishes = searchAllInRange(getDishes, getDishesRequest.MinPrice, getDishesRequest.MaxPrice).ToList();
+        response = _mapper.Map<List<DishResponse>>(dishes);
         return new ResponseObject()
         {
             Result = response,
@@ -131,7 +136,7 @@ public class DishService : IDishService
         if (dishCheckDuplicated != null)
             return new ResponseObject()
             {
-
+                    
             };
         var dish = _mapper.Map<Dish>(createDishRequest);
         var response = _unitOfWork.DishRepository.Insert(dish);

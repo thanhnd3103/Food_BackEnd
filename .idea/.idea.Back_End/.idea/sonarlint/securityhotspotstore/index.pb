@@ -89,5 +89,3 @@ B
 DAL/MyDBContext.cs,f\a\fa0b534911e9ba375ee633a33e0137f3aea0a371
 [
 +Common/ResponseObjects/Dish/DishResponse.cs,4\d\4dad029afc21d06d256001f6cc331ebd3806615c
-R
-"Common/Status/TransactionStatus.cs,e\5\e54f1ceb596c5d91b0f627592170d4b3147616e0

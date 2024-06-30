@@ -10,10 +10,10 @@ namespace DAL.Migrations
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
         {
-            migrationBuilder.AlterColumn<int>(
+            migrationBuilder.AlterColumn<string>(
                 name: "Status",
                 table: "Transactions",
-                type: "integer",
+                type: "text",
                 nullable: false,
                 oldClrType: typeof(bool),
                 oldType: "boolean");
@@ -47,8 +47,8 @@ namespace DAL.Migrations
                 table: "Transactions",
                 type: "boolean",
                 nullable: false,
-                oldClrType: typeof(int),
-                oldType: "integer");
+                oldClrType: typeof(string),
+                oldType: "text");
         }
     }
 }

@@ -1,6 +1,10 @@
-﻿using DAL.Entities;
+﻿using Common.Status;
+using Common.Utils;
+using DAL.Entities;
 using DAL.Interceptors;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Transaction = DAL.Entities.Transaction;
 
 namespace DAL
 {
@@ -52,12 +56,34 @@ namespace DAL
                 .HasForeignKey(i => i.DishID)
                 .OnDelete(DeleteBehavior.NoAction);
             
-            // modelBuilder
-            //     .Entity<Rider>()
-            //     .Property(e => e.Mount)
-            //     .HasConversion(
-            //         v => v.ToString(),
-            //         v => (EquineBeast)Enum.Parse(typeof(EquineBeast), v));
+            modelBuilder
+                .Entity<Transaction>()
+                .Property(e => e.Status)
+                .HasConversion(new EnumToStringConverter<TransactionHistoryStatus>());
+            
+            foreach (var entityType in modelBuilder.Model.GetEntityTypes())
+            {
+                foreach (var property in entityType.GetProperties())
+                {
+                    if (property.ClrType == typeof(DateTime))
+                    {
+                        property.SetValueConverter(new ValueConverter<DateTime, DateTime>(
+                            v => v.SetKindUtc(),
+                            v => v.SetKindUtc()
+                        ));
+                    }
+
+                    if (property.ClrType == typeof(DateTime?))
+                    {
+                        property.SetValueConverter(new ValueConverter<DateTime?, DateTime?>(
+                            v => v.SetKindUtc(),
+                            v => v.SetKindUtc()
+                        ));
+                    }
+                }
+            }
+
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

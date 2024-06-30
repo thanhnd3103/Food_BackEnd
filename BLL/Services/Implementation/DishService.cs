@@ -229,15 +229,15 @@ public class DishService : IDishService
     {
         if (min != null && max == null)
         {
-            return queryable.Where(x => x.Price > min).ToList();
+            return queryable.Where(x => x.Price >= min).ToList();
         }
         if (min == null && max != null)
         {
-            return queryable.Where(x => x.Price < max && x.Price > 0).ToList();
+            return queryable.Where(x => x.Price <= max && x.Price > 0).ToList();
         }
         if (min != null && max != null)
         {
-            return queryable.Where(x => x.Price < max && x.Price > min).ToList();
+            return queryable.Where(x => x.Price <= max && x.Price > min).ToList();
         }
         return queryable.ToList();
     }

@@ -1,6 +1,8 @@
 using BLL.Services.Interfaces;
+using Common.Constants;
 using Common.Enums;
 using Common.RequestObjects.Dish;
+using Common.ResponseObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -40,19 +42,19 @@ public class DishController : ControllerBase
     }
 
 
-    //[HttpPost]
-    //[Authorize(Roles = "Admin")]
-    //public ActionResult<object> CreateDish(CreateDishRequest createDishRequest)
-    //{
-    //    if (!ModelState.IsValid)
-    //    {
-    //        return new ResponseObject
-    //        {
-    //            Message = Messages.General.MODEL_STATE_INVALID,
-    //            StatusCode = HttpStatusCode.BadRequest,
-    //            Result = ModelState.Values.SelectMany(v => v.Errors)
-    //        };
-    //    }
-    //    return _dishService.CreateDish(createDishRequest);
-    //}
+    [HttpPost]
+    [Authorize(Roles = "Admin")]
+    public ActionResult<object> CreateDish([FromForm] CreateDishRequest createDishRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return new ResponseObject
+            {
+                Message = Messages.General.MODEL_STATE_INVALID,
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                Result = ModelState.Values.SelectMany(v => v.Errors)
+            };
+        }
+        return _dishService.CreateDish(createDishRequest);
+    }
 }

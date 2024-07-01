@@ -33,7 +33,7 @@ namespace BLL.Utilities.AWSHelper
             }
             catch (Exception ex)
             {
-                return (false, "");
+                return (false, ex.ToString());
             }
 
         }

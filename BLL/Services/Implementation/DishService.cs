@@ -253,7 +253,7 @@ public class DishService : IDishService
         {
             return new ResponseObject()
             {
-                Result = null,
+                Result = imageUrl,
                 Message = Messages.General.CRITICAL_UNIDENTIFIED_ERROR,
                 StatusCode = HttpStatusCode.OK
             };

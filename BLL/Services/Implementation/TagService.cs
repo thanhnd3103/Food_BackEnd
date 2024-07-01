@@ -31,4 +31,16 @@ public class TagService : ITagService
             StatusCode = HttpStatusCode.OK
         };
     }
+
+    public ResponseObject GetAllTagByName(string tagName)
+    {
+        var tags = _unitOfWork.TagRepository.Get(x => x.Name.Contains(tagName)).ToList();
+        var response = _mapper.Map<List<TagResponse>>(tags);
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.TagMessage.GET_TAGS_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+    }
 }

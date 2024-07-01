@@ -21,4 +21,11 @@ public class TagController : ControllerBase
         var response = _tagService.GetAllTag();
         return response;
     }
+    
+    [HttpGet("/tags/search-by-name")]
+    public ActionResult<object> GetTagsByName([FromQuery] string tagName)
+    {
+        var response = _tagService.GetAllTagByName(tagName);
+        return response;
+    }
 }

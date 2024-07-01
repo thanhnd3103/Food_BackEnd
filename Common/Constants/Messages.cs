@@ -43,5 +43,10 @@
         {
             public const string GET_ACCOUNT_BY_ID_SUCCESS = "Trả về dữ liệu của người dùng thnh công";
         }
+        
+        public static class TagMessage
+        {
+            public const string GET_TAGS_SUCCESS = "Dữ liệu của tags";
+        }
     }
 }

@@ -1,4 +1,3 @@
-using System.Net;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using BLL.Utilities.LoginAccount.Interface;
@@ -11,6 +10,7 @@ using Common.Status;
 using Common.Utils;
 using DAL.Entities;
 using DAL.Repositories;
+using System.Net;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -21,7 +21,7 @@ public class OrderService : IOrderService
     private readonly ICurrentLoginAccount _currentLoginAccount;
     private readonly IMapper _mapper;
 
-    public OrderService(IUnitOfWork unitOfWork, ICurrentLoginAccount currentLoginAccount, 
+    public OrderService(IUnitOfWork unitOfWork, ICurrentLoginAccount currentLoginAccount,
         IMapper mapper)
     {
         _unitOfWork = unitOfWork;
@@ -35,7 +35,7 @@ public class OrderService : IOrderService
         decimal totalPrice = 0;
         //response
         OrderResponse response = null;
-        
+
         // string userId = _currentLoginAccount.getAccount();
         if (userId is null)
         {
@@ -52,7 +52,7 @@ public class OrderService : IOrderService
         {
             var dishCheck = _unitOfWork.DishRepository.
                 Get(x => x.DishID == dish.DishId).FirstOrDefault();
-            if (dishCheck is null)
+            if (dishCheck is null || dishCheck.IsDeleted == true)
                 return new ResponseObject()
                 {
                     Result = null,
@@ -109,7 +109,7 @@ public class OrderService : IOrderService
             };
             _ = _unitOfWork.TransactionRepository.Insert(transactionHistory);
             _unitOfWork.Save();
-            
+
             transaction.Commit();
         }
         catch (Exception e)

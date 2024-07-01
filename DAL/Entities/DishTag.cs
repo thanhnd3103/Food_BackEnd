@@ -1,9 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Microsoft.EntityFrameworkCore;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace DAL.Entities
 {
 #pragma warning disable CS8618
+    [Index(nameof(DishID), nameof(TagID), IsUnique = true)]
     public class DishTag
     {
         [Key]
@@ -12,6 +14,7 @@ namespace DAL.Entities
 
         [Required]
         [ForeignKey(nameof(Dish))]
+
         public int DishID { get; set; }
         [Required]
         [ForeignKey(nameof(Tag))]

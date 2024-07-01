@@ -67,7 +67,7 @@ namespace BLL.Services.Implementation
             try
             {
                 Account loginAccount = _unitOfWork.AccountRepository!.Get(filter: account => account.Email == request.Email).FirstOrDefault();
-                if (loginAccount != null && BCrypt.Net.BCrypt.Verify(request.Password, loginAccount.PasswordHash))
+                if (loginAccount != null && loginAccount.IsDeleted == false && BCrypt.Net.BCrypt.Verify(request.Password, loginAccount.PasswordHash))
                 {
                     return new ResponseObject
                     {

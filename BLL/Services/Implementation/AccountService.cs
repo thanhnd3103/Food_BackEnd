@@ -1,10 +1,10 @@
-using System.Net;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.ResponseObjects;
 using Common.ResponseObjects.Account;
 using DAL.Repositories;
+using System.Net;
 
 namespace BLL.Services.Implementation;
 
@@ -18,7 +18,7 @@ public class AccountService : IAccountService
         _unitOfWork = unitOfWork;
         _mapper = mapper;
     }
-    
+
     public ResponseObject GetAccountById(int accountId)
     {
         var account = _unitOfWork.AccountRepository.GetByID(accountId);

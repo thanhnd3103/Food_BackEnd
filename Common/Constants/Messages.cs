@@ -25,10 +25,10 @@
         public static class DishMessage
         {
             public const string LIST_DISHES_MESSAGE_SUCCESS = "Một dãy các món ăn";
-            public const string CREATE_DISH_MESSAGE_SUCCESS = "Món ăn được tạo thành công";
-            public const string CREATE_DISH_MESSAGE_SUCCESS_NO_TAG = "Món ăn được tạo thành công, nhưng không có tag";
+            public const string CREATE_UPDATE_DISH_MESSAGE_SUCCESS = "Món ăn được cập nhật thành công";
+            public const string CREATE_UPDATE_DISH_MESSAGE_SUCCESS_NO_TAG = "Món ăn được cập nhật thành công, nhưng không có tag";
             public const string GET_DISH_SUCCESS = "Lấy món ăn thành công";
-            public const string NO_CONTENT = "Không có món ăn thuộc tag này, hoặc tag không tồn tại";
+            public const string NO_CONTENT = "Không có món ăn hợp lệ để thực hiện hành động này.";
             public const string DUPLICATED_DISH = "Món ăn đã tồn tại";
             public const string INVALID_TAG = "Chứa tag không hợp lệ";
         }
@@ -43,7 +43,7 @@
         {
             public const string GET_ACCOUNT_BY_ID_SUCCESS = "Trả về dữ liệu của người dùng thnh công";
         }
-        
+
         public static class TagMessage
         {
             public const string GET_TAGS_SUCCESS = "Dữ liệu của tags";

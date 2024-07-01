@@ -1,11 +1,10 @@
 using BLL.Services.Interfaces;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api")]
+[Route("/api/[controller]")]
 public class TagController : ControllerBase
 {
     private readonly ITagService _tagService;
@@ -21,7 +20,7 @@ public class TagController : ControllerBase
         var response = _tagService.GetAllTag();
         return response;
     }
-    
+
     [HttpGet("/tags/search-by-name")]
     public ActionResult<object> GetTagsByName([FromQuery] string tagName)
     {

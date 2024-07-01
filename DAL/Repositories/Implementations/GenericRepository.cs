@@ -84,6 +84,7 @@ namespace DAL.Repositories.Implementations
         {
             dbSet.Attach(entityToUpdate);
             context.Entry(entityToUpdate).State = EntityState.Modified;
+            context.SaveChanges();
             return entityToUpdate;
         }
 

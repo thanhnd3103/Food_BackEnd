@@ -170,20 +170,47 @@ public class DishService : IDishService
         else
         {
             Random random = new Random();
-            int randomNumber = random.Next(0, dishTagList.Count);
-            Dish resultEntity = _unitOfWork.DishRepository!.GetByID(dishTagList[randomNumber].DishID)!;
-            return new ResponseObject()
+            int maxAttempts = dishTagList.Count * 2; // Maximum number of attempts to find a valid dish
+            int attempt = 0;
+            Dish? resultEntity = null;
+
+            while (attempt < maxAttempts)
             {
-                StatusCode = HttpStatusCode.OK,
-                Message = Messages.DishMessage.GET_DISH_SUCCESS,
-                Result = new DishResponse
+                int randomNumber = random.Next(0, dishTagList.Count);
+                resultEntity = _unitOfWork.DishRepository!.GetByID(dishTagList[randomNumber].DishID);
+
+                if (resultEntity != null && !resultEntity.IsDeleted)
                 {
-                    DishID = resultEntity.DishID,
-                    Name = resultEntity.Name,
-                    Price = resultEntity.Price,
-                    ImageUrl = resultEntity.ImageUrl,
-                },
-            };
+                    break;
+                }
+
+                attempt++;
+            }
+
+            if (resultEntity != null && !resultEntity.IsDeleted)
+            {
+                return new ResponseObject()
+                {
+                    StatusCode = HttpStatusCode.OK,
+                    Message = Messages.DishMessage.GET_DISH_SUCCESS,
+                    Result = new DishResponse
+                    {
+                        DishID = resultEntity.DishID,
+                        Name = resultEntity.Name,
+                        Price = resultEntity.Price,
+                        ImageUrl = resultEntity.ImageUrl,
+                    },
+                };
+            }
+            else
+            {
+                return new ResponseObject()
+                {
+                    StatusCode = HttpStatusCode.NoContent,
+                    Message = Messages.DishMessage.NO_CONTENT,
+                    Result = null
+                };
+            }
         }
     }
     #endregion
@@ -234,7 +261,7 @@ public class DishService : IDishService
                 return new ResponseObject()
                 {
                     Result = _mapper.Map<DishResponse>(response),
-                    Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS,
+                    Message = Messages.DishMessage.CREATE_UPDATE_DISH_MESSAGE_SUCCESS,
                     StatusCode = HttpStatusCode.OK
                 };
             }
@@ -243,7 +270,7 @@ public class DishService : IDishService
                 return new ResponseObject()
                 {
                     Result = _mapper.Map<DishResponse>(response),
-                    Message = Messages.DishMessage.CREATE_DISH_MESSAGE_SUCCESS_NO_TAG,
+                    Message = Messages.DishMessage.CREATE_UPDATE_DISH_MESSAGE_SUCCESS_NO_TAG,
                     StatusCode = HttpStatusCode.OK
                 };
             }
@@ -259,6 +286,122 @@ public class DishService : IDishService
             };
         }
 
+    }
+
+    public ResponseObject UpdateDish(UpdateDishRequest request)
+    {
+        #region checkNameDuplicated
+        var dishCheckDuplicated = _unitOfWork.DishRepository!
+            .Get(filter: dish => dish.Name.Trim().ToLower().Equals(request.Name.Trim().ToLower()))
+            .FirstOrDefault();
+        if (dishCheckDuplicated != null)
+        {
+            return new ResponseObject()
+            {
+                Message = Messages.DishMessage.DUPLICATED_DISH,
+                Result = null,
+                StatusCode = HttpStatusCode.OK,
+            };
+        }
+        #endregion
+
+        #region check if id existed
+
+        var dishCheckExisted = _unitOfWork.DishRepository!
+                                .Get(filter: dish => dish.DishID == request.DishId)
+                                .FirstOrDefault();
+        if (dishCheckExisted == null)
+        {
+            return new ResponseObject()
+            {
+                Message = Messages.DishMessage.NO_CONTENT,
+                Result = null,
+                StatusCode = HttpStatusCode.NoContent,
+            };
+        }
+        #endregion
+        else
+        {
+            #region delete old image
+            (bool isDeleted, string errorMsg) = _awsHelper.DeleteImage(dishCheckExisted.ImageUrl);
+            if (!isDeleted)
+            {
+                return new ResponseObject()
+                {
+                    Result = errorMsg,
+                    Message = Messages.General.CRITICAL_UNIDENTIFIED_ERROR,
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
+            #endregion
+
+
+            (bool isSuccess, string imageUrl) = _awsHelper.UploadImage(request.ImageFile);
+
+            if (isSuccess)
+            {
+                _mapper.Map(request, dishCheckExisted);
+                dishCheckExisted.ImageUrl = imageUrl;
+                if (!dishCheckExisted.IsDeleted)
+                {
+                    dishCheckExisted.DeletedAt = null;
+                }
+
+                _unitOfWork.DishRepository!.Update(dishCheckExisted);
+                #region delete all current tag in DishTag table
+                var currentDishTag = _unitOfWork.DishTagRepository!.Get(filter: dishTag => dishTag.DishID == request.DishId);
+
+                foreach (var dishTag in currentDishTag)
+                {
+                    _unitOfWork.DishTagRepository!.Delete(dishTag);
+                }
+                _unitOfWork.Save();
+                #endregion
+
+                #region Add Tag
+                var tagList = _unitOfWork.TagRepository!.Get();
+                foreach (int tagId in request.TagList.Distinct().ToArray())
+                {
+                    if (tagList.Any(tag => tag.TagID == tagId))
+                    {
+                        _unitOfWork.DishTagRepository!.Insert(new DishTag
+                        {
+                            TagID = tagId,
+                            DishID = dishCheckExisted.DishID,
+                        });
+                    }
+                }
+                #endregion
+                if (_unitOfWork.Save() > 0)
+                {
+                    return new ResponseObject()
+                    {
+                        Result = _mapper.Map<DishResponse>(dishCheckExisted),
+                        Message = Messages.DishMessage.CREATE_UPDATE_DISH_MESSAGE_SUCCESS,
+                        StatusCode = HttpStatusCode.OK
+                    };
+                }
+                else
+                {
+                    return new ResponseObject()
+                    {
+                        Result = _mapper.Map<DishResponse>(dishCheckExisted),
+                        Message = Messages.DishMessage.CREATE_UPDATE_DISH_MESSAGE_SUCCESS_NO_TAG,
+                        StatusCode = HttpStatusCode.OK
+                    };
+                }
+
+            }
+            else
+            {
+                return new ResponseObject()
+                {
+                    Result = imageUrl,
+                    Message = Messages.General.CRITICAL_UNIDENTIFIED_ERROR,
+                    StatusCode = HttpStatusCode.OK
+                };
+            }
+        }
     }
 
 }

@@ -35,7 +35,32 @@ namespace BLL.Utilities.AWSHelper
             {
                 return (false, ex.ToString());
             }
+        }
+        public (bool, string) DeleteImage(string imageUrl)
+        {
+            try
+            {
+                // Extract the key (file name) from the URL
+                Uri uri = new Uri(imageUrl);
+                string key = uri.AbsolutePath.TrimStart('/');
 
+                // Create the delete object request
+                DeleteObjectRequest deleteObjectRequest = new DeleteObjectRequest
+                {
+                    BucketName = _bucketName,
+                    Key = key
+                };
+
+                // Delete the object
+                _s3client.DeleteObjectAsync(deleteObjectRequest).Wait();
+
+                return (true, "");
+            }
+            catch (Exception ex)
+            {
+                // Handle exception
+                return (false, ex.ToString());
+            }
         }
     }
 }

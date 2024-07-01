@@ -20,6 +20,7 @@ namespace BLL.Utilities.AutoMapper
 
             CreateMap<Account, RegisterRequest>();
             CreateMap<CreateDishRequest, Dish>();
+            CreateMap<UpdateDishRequest, Dish>();
             CreateMap<Dish, DishResponse>();
             CreateMap<Order, OrderResponse>()
                         .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));

@@ -57,4 +57,19 @@ public class DishController : ControllerBase
         }
         return _dishService.CreateDish(createDishRequest);
     }
+    [HttpPut]
+    [Authorize(Roles = "Admin")]
+    public ActionResult<object> UpdateDish([FromForm] UpdateDishRequest updateDishRequest)
+    {
+        if (!ModelState.IsValid)
+        {
+            return new ResponseObject
+            {
+                Message = Messages.General.MODEL_STATE_INVALID,
+                StatusCode = System.Net.HttpStatusCode.BadRequest,
+                Result = ModelState.Values.SelectMany(v => v.Errors)
+            };
+        }
+        return _dishService.UpdateDish(updateDishRequest);
+    }
 }

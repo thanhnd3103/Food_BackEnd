@@ -4,6 +4,7 @@ using DAL.Entities;
 using DAL.Interceptors;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
+using Microsoft.Extensions.Configuration;
 using Transaction = DAL.Entities.Transaction;
 
 namespace DAL
@@ -28,7 +29,18 @@ namespace DAL
         public DbSet<Transaction> Transactions { get; set; }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
-            => optionsBuilder.AddInterceptors(new SoftDeleteInterceptor(), new InsertInterceptor());
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                IConfigurationRoot configuration = new ConfigurationBuilder()
+                        .SetBasePath(Directory.GetCurrentDirectory())
+                        .AddJsonFile("appsettings.json")
+                        .Build();
+                var connectionString = configuration.GetConnectionString("LocalDBConnection");
+                optionsBuilder.UseNpgsql(connectionString);
+            }
+            optionsBuilder.AddInterceptors(new SoftDeleteInterceptor(), new InsertInterceptor());
+        }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
@@ -55,6 +67,7 @@ namespace DAL
                 .WithMany(i => i.DishTags)
                 .HasForeignKey(i => i.DishID)
                 .OnDelete(DeleteBehavior.NoAction);
+
 
             modelBuilder
                 .Entity<Transaction>()

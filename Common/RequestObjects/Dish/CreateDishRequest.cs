@@ -15,7 +15,6 @@ public class CreateDishRequest
     public decimal Price { get; set; }
 
     [Required(ErrorMessage = "Image is required.")]
-    [ImageValidation(ErrorMessage = "Image must be a valid image file and less than 2MB in size.")]
     public IFormFile ImageFile { get; set; }
 
     [Required, MinLength(1)]

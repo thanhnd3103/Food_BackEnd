@@ -1,0 +1,5 @@
+
+Šcsharpsquid:S2971Ÿ"eDrop this useless call to 'ToList' or replace it by 'AsEnumerable' if you are using LINQ to Entities.(ıã‚®8ØşÏÄ†2
+Šcsharpsquid:S2971¦"eDrop this useless call to 'ToList' or replace it by 'AsEnumerable' if you are using LINQ to Entities.(ıã‚®8ÙşÏÄ†2
+ccsharpsquid:S1854H":Remove this useless assignment to local variable 'dishes'.(Òš®Îüÿÿÿÿ8ÚşÏÄ†2
+ecsharpsquid:S1854G"<Remove this useless assignment to local variable 'response'.(±Æ¢êøÿÿÿÿ8ÜşÏÄ†2

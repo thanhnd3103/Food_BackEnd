@@ -98,6 +98,7 @@ builder.Services.AddScoped<IDishService, DishService>();
 builder.Services.AddScoped<IOrderService, OrderService>();
 builder.Services.AddScoped<ICurrentLoginAccount, CurrentLoginAccount>();
 builder.Services.AddScoped<IAccountService, AccountService>();
+builder.Services.AddScoped<ITagService, TagService>();
 
 var app = builder.Build();
 

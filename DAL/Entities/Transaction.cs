@@ -1,7 +1,7 @@
-﻿using DAL.Entities.Interfaces;
+﻿using Common.Status;
+using DAL.Entities.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Common.Status;
 
 namespace DAL.Entities
 {
@@ -14,15 +14,15 @@ namespace DAL.Entities
 
         public string? BankCode { get; set; }
         public int? Txn_ref { get; set; }
-        
+
         [Required]
         public decimal TotalPrice { get; set; }
         [Required]
         public TransactionHistoryStatus Status { get; set; }
         [Required]
         public DateTime TransactionDate { get; set; }
-        
-        [ForeignKey(nameof(Transaction))]
+
+        [ForeignKey(nameof(Order))]
         public int OrderID { get; set; }
 
         public virtual Order Order { get; set; }

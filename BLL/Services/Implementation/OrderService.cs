@@ -67,6 +67,7 @@ public class OrderService : IOrderService
         {
             AccountID = int.Parse(userId),
             BookingPrice = totalPrice,
+            IsSuccess = false,
             IsDeleted = false,
             BookingTime = DateTime.Now.SetKindUtc()
         };

@@ -38,15 +38,15 @@ namespace DAL.Repositories.Implementations
             }
             if (orderBy != null)
             {
-                orderBy(query);
+                query = orderBy(query);
             }
             if (skipCount > 0)
             {
-                query.Skip(skipCount.Value);
+                query = query.Skip(skipCount.Value);
             }
             if (takeCount > 0)
             {
-                query.Take(takeCount.Value);
+                query = query.Take(takeCount.Value);
             }
             return query.ToList();
         }

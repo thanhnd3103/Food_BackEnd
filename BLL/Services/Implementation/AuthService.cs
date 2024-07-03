@@ -71,7 +71,7 @@ namespace BLL.Services.Implementation
                 {
                     return new ResponseObject
                     {
-                        StatusCode = System.Net.HttpStatusCode.Unauthorized,
+                        StatusCode = System.Net.HttpStatusCode.OK,
                         Message = Messages.AuthController.LOGIN_SUCCESS,
                         Result = _jwtHelper.CreateToken(loginAccount)
                     };
@@ -79,7 +79,7 @@ namespace BLL.Services.Implementation
 
                 return new ResponseObject
                 {
-                    StatusCode = System.Net.HttpStatusCode.OK,
+                    StatusCode = System.Net.HttpStatusCode.Unauthorized,
                     Message = Messages.AuthController.LOGIN_FAILED,
                     Result = null,
                 };

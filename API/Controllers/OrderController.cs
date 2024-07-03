@@ -4,6 +4,7 @@ using Common.RequestObjects.Order;
 using Common.ResponseObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using System.Security.Claims;
 
@@ -22,6 +23,7 @@ public class OrderController : ControllerBase
 
     [HttpPost]
     [Authorize]
+    [SwaggerOperation(Summary = "Will also create a NOT PAID transaction for this order")]
     public ActionResult<ResponseObject> Order(OrderRequest request)
     {
         if (!ModelState.IsValid)

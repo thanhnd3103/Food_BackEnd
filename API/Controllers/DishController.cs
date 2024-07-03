@@ -5,6 +5,7 @@ using Common.RequestObjects.Dish;
 using Common.ResponseObjects;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Swashbuckle.AspNetCore.Annotations;
 
 namespace API.Controllers;
 
@@ -21,6 +22,7 @@ public class DishController : ControllerBase
 
     [HttpGet("dishes")]
     [Authorize]
+    [SwaggerOperation(Summary = "Return dishes with request's conditions and paging (Status: 0 - inactive, 1 - active)")]
     public ActionResult<object> GetDishes([FromQuery] GetDishesRequest getDishesRequest)
     {
         var response = _dishService.GetDishes(getDishesRequest);
@@ -36,6 +38,7 @@ public class DishController : ControllerBase
 
     [HttpGet("random")]
     [Authorize]
+    [SwaggerOperation(Summary = "Will return 1 random dish (0 - breakfast, 1 - lunch, 2 - dinner) or none at all")]
     public ActionResult<object> RandomDish([FromQuery] Meal meal)
     {
         return _dishService.RandomDish(meal);

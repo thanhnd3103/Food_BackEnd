@@ -68,6 +68,7 @@ public class OrderService : IOrderService
         var order = new Order()
         {
             AccountID = int.Parse(userId),
+            // Account = _unitOfWork.AccountRepository.Get(x => x.AccountID == int.Parse(userId)).FirstOrDefault(),
             BookingPrice = totalPrice,
             IsSuccess = false,
             IsDeleted = false,
@@ -78,8 +79,11 @@ public class OrderService : IOrderService
         try
         {
             var orderCreated = _unitOfWork.OrderRepository.Insert(order);
-            response = _mapper.Map<OrderResponse>(orderCreated);
             _unitOfWork.Save();
+            var orderMapper = _unitOfWork.OrderRepository.Get(x => x.OrderID == orderCreated.OrderID,
+                    includeProperties: x => x.Account)
+                .FirstOrDefault();
+            response = _mapper.Map<OrderResponse>(orderMapper);
             foreach (var dish in request.Dishes)
             {
                 var dishCheck = _unitOfWork.DishRepository.
@@ -165,7 +169,7 @@ public class OrderService : IOrderService
             includeProperties: new Expression<Func<Order, object>>[]
             {
                 o => o.Account,
-                o => o.OrderDetails.Select(o => o.Dish),
+                o => o.OrderDetails.Select(od => od.Dish)
             })
             .FirstOrDefault();
         var response = _mapper.Map<OrderDetailResponse>(order);

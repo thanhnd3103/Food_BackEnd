@@ -23,7 +23,7 @@ namespace BLL.Utilities.AutoMapper
             CreateMap<UpdateDishRequest, Dish>();
             CreateMap<Dish, DishResponse>();
             CreateMap<Order, OrderResponse>()
-                        .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));
+                .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));
             CreateMap<Account, AccountResponse>();
             CreateMap<Tag, TagResponse>();
 
@@ -31,7 +31,7 @@ namespace BLL.Utilities.AutoMapper
                 .ForMember(dest => dest.DishName, opt => opt.MapFrom(src => src.Dish.Name))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
                 .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
-            
+
             CreateMap<Order, OrderDetailResponse>()
                 .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));
         }

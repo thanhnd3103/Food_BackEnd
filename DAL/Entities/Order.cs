@@ -18,9 +18,6 @@ namespace DAL.Entities
         [ForeignKey(nameof(Account))]
         public int AccountID { get; set; }
         [Required]
-        [ForeignKey(nameof(Transaction))]
-        public int TransactionID { get; set; }
-        [Required]
         public bool IsSuccess { get; set; } = false;
         public virtual Account Account { get; set; }
         public virtual Transaction Transaction { get; set; }

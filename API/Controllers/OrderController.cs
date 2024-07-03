@@ -45,4 +45,12 @@ public class OrderController : ControllerBase
         var response = _orderService.GetOrders(request);
         return response;
     }
+    
+    [HttpGet("/orders/{orderId}/order-detail")]
+    [Authorize]
+    public ActionResult<object> GetOrders([FromRoute] int orderId)
+    {
+        var response = _orderService.GetOrderDetailByOrderId(orderId);
+        return response;
+    }
 }

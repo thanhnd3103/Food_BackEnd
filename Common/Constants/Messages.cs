@@ -49,5 +49,10 @@
         {
             public const string GET_TAGS_SUCCESS = "Dữ liệu của tags";
         }
+        
+        public static class OrderDetailMessage
+        {
+            public const string GET_ORDER_DETAIL_BY_ID_SUCCESS = "Dữ liệu order detail";
+        }
     }
 }

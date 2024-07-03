@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using BLL.Utilities.LoginAccount.Interface;
@@ -11,6 +12,7 @@ using Common.Utils;
 using DAL.Entities;
 using DAL.Repositories;
 using System.Net;
+using Common.ResponseObjects.Pagination;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -141,11 +143,44 @@ public class OrderService : IOrderService
             takeCount: request.PageSize
         ).ToList();
 
-        var response = _mapper.Map<List<OrderResponse>>(orders);
+        var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
+        var response = new PaginationResponse()
+        {
+            Items = ordersMappers,
+            TotalPage = (int)Math.Ceiling((decimal)ordersMappers.Count() / request.PageSize),
+            PageSize = request.PageSize,
+            PageNumber = request.PageNumber,
+        };
         return new ResponseObject()
         {
             Result = response,
             Message = Messages.OrderMessage.LIST_ORDER_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+    }
+
+    public ResponseObject GetOrderDetailByOrderId(int orderId)
+    {
+        var order = _unitOfWork.OrderRepository.Get(filter: x => x.OrderID == orderId,
+            includeProperties: new Expression<Func<Order, object>>[]
+            {
+                o => o.Account,
+                o => o.OrderDetails.Select(o => o.Dish),
+            })
+            .FirstOrDefault();
+        var response = _mapper.Map<OrderDetailResponse>(order);
+        List<OrderDishResponse> dishOrderResponse = new List<OrderDishResponse>();
+        foreach (var orderDetail in order.OrderDetails)
+        {
+            var dishOrderMapper = _mapper.Map<OrderDishResponse>(orderDetail);
+            dishOrderResponse.Add(dishOrderMapper);
+        }
+
+        response.OrderDetails = dishOrderResponse;
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.OrderDetailMessage.GET_ORDER_DETAIL_BY_ID_SUCCESS,
             StatusCode = HttpStatusCode.OK
         };
     }

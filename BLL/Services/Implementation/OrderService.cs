@@ -1,3 +1,4 @@
+using System.Linq.Expressions;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using BLL.Utilities.LoginAccount.Interface;
@@ -11,6 +12,7 @@ using Common.Utils;
 using DAL.Entities;
 using DAL.Repositories;
 using System.Net;
+using Common.ResponseObjects.Pagination;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -66,6 +68,7 @@ public class OrderService : IOrderService
         var order = new Order()
         {
             AccountID = int.Parse(userId),
+            // Account = _unitOfWork.AccountRepository.Get(x => x.AccountID == int.Parse(userId)).FirstOrDefault(),
             BookingPrice = totalPrice,
             IsSuccess = false,
             IsDeleted = false,
@@ -76,8 +79,11 @@ public class OrderService : IOrderService
         try
         {
             var orderCreated = _unitOfWork.OrderRepository.Insert(order);
-            response = _mapper.Map<OrderResponse>(orderCreated);
             _unitOfWork.Save();
+            var orderMapper = _unitOfWork.OrderRepository.Get(x => x.OrderID == orderCreated.OrderID,
+                    includeProperties: x => x.Account)
+                .FirstOrDefault();
+            response = _mapper.Map<OrderResponse>(orderMapper);
             foreach (var dish in request.Dishes)
             {
                 var dishCheck = _unitOfWork.DishRepository.
@@ -129,6 +135,57 @@ public class OrderService : IOrderService
             Message = Messages.OrderMessage.ORDER_SUCCESS,
             StatusCode = HttpStatusCode.OK,
             Result = response
+        };
+    }
+
+    public ResponseObject GetOrders(GetOrdersRequest request)
+    {
+        // Get orders by paging
+        var orders = _unitOfWork.OrderRepository.Get(
+            // filter: x => x.IsSuccess == true,
+            skipCount: (request.PageNumber - 1) * request.PageSize,
+            takeCount: request.PageSize
+        ).ToList();
+
+        var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
+        var response = new PaginationResponse()
+        {
+            Items = ordersMappers,
+            TotalPage = (int)Math.Ceiling((decimal)ordersMappers.Count() / request.PageSize),
+            PageSize = request.PageSize,
+            PageNumber = request.PageNumber,
+        };
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.OrderMessage.LIST_ORDER_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+    }
+
+    public ResponseObject GetOrderDetailByOrderId(int orderId)
+    {
+        var order = _unitOfWork.OrderRepository.Get(filter: x => x.OrderID == orderId,
+            includeProperties: new Expression<Func<Order, object>>[]
+            {
+                o => o.Account,
+                o => o.OrderDetails.Select(od => od.Dish)
+            })
+            .FirstOrDefault();
+        var response = _mapper.Map<OrderDetailResponse>(order);
+        List<OrderDishResponse> dishOrderResponse = new List<OrderDishResponse>();
+        foreach (var orderDetail in order.OrderDetails)
+        {
+            var dishOrderMapper = _mapper.Map<OrderDishResponse>(orderDetail);
+            dishOrderResponse.Add(dishOrderMapper);
+        }
+
+        response.OrderDetails = dishOrderResponse;
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.OrderDetailMessage.GET_ORDER_DETAIL_BY_ID_SUCCESS,
+            StatusCode = HttpStatusCode.OK
         };
     }
 }

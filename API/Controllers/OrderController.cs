@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("/api")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -21,7 +21,7 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
-    [HttpPost]
+    [HttpPost("/orders")]
     [Authorize]
     [SwaggerOperation(Summary = "Will also create a NOT PAID transaction for this order")]
     public ActionResult<ResponseObject> Order(OrderRequest request)
@@ -35,6 +35,14 @@ public class OrderController : ControllerBase
             };
         var userId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
         var response = _orderService.Order(request, userId);
+        return response;
+    }
+
+    [HttpGet("/orders")]
+    [Authorize]
+    public ActionResult<object> GetOrders([FromQuery] GetOrdersRequest request)
+    {
+        var response = _orderService.GetOrders(request);
         return response;
     }
 }

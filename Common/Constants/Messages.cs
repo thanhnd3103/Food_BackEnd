@@ -37,6 +37,7 @@
         {
             public const string PASS_WRONG_ID = "Truyền Id sai";
             public const string ORDER_SUCCESS = "Tạo order thành công";
+            public const string LIST_ORDER_SUCCESS = "List orders của nhà hàng";
         }
 
         public static class AccountMessage

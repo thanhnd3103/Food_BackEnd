@@ -16,7 +16,7 @@ namespace DAL.Repositories.Implementations
         }
 
         //EXAMPLE ORDERBY : orderBy: q => q.OrderBy(d => d.Name)
-        public virtual IEnumerable<TEntity> Get(
+        public   IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             int? skipCount = 0,

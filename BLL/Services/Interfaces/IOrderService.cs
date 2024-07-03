@@ -6,4 +6,5 @@ namespace BLL.Services.Interfaces;
 public interface IOrderService
 {
     ResponseObject Order(OrderRequest request, string userId);
+    ResponseObject GetOrders(GetOrdersRequest request);
 }

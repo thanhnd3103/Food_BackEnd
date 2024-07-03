@@ -131,4 +131,22 @@ public class OrderService : IOrderService
             Result = response
         };
     }
+
+    public ResponseObject GetOrders(GetOrdersRequest request)
+    {
+        // Get orders by paging
+        var orders = _unitOfWork.OrderRepository.Get(
+            // filter: x => x.IsSuccess == true,
+            skipCount: (request.PageNumber - 1) * request.PageSize,
+            takeCount: request.PageSize
+        ).ToList();
+
+        var response = _mapper.Map<List<OrderResponse>>(orders);
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.OrderMessage.LIST_ORDER_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+    }
 }

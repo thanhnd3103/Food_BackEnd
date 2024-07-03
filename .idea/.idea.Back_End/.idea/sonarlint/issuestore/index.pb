@@ -105,3 +105,11 @@ Z
 -BLL/Services/Implementation/AccountService.cs,e\d\ed3fa8b034704dbaadc5ab5a00624611ed0ed6a3
 T
 $API/Controllers/AccountController.cs,6\3\631dd92a3803ee2b7fda531fe47b4e34c7ced6b2
+V
+&BLL/Services/Interfaces/ITagService.cs,7\9\79b6db35a9815fb4b41d8aa72b6c21091f6ffb7a
+P
+ API/Controllers/TagController.cs,3\9\39ba3686db6cfe7f85d3c531d50f87570ee12ae0
+Y
+)BLL/Services/Implementation/TagService.cs,3\d\3da6f7ef801cfac8a5afcf5bbb591bb7f5a73532
+Y
+)Common/Status/TransactionHistoryStatus.cs,c\1\c13c63fb7d7a88092478d0800989c756d8471d2d

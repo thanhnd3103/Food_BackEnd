@@ -1,6 +1,7 @@
 using BLL.Services.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using System.Security.Claims;
 
 namespace API.Controllers;
 
@@ -21,5 +22,12 @@ public class AccountController : ControllerBase
     {
         var response = _accountService.GetAccountById(accountId);
         return response;
+    }
+    [HttpGet("current")]
+    [Authorize]
+    public ActionResult<object> GetCurrentAccountInfo()
+    {
+        var accountId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
+        return _accountService.GetAccountById(Int32.Parse(accountId!));
     }
 }

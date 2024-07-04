@@ -1,0 +1,9 @@
+
+wcsharpsquid:S3776ƒ"RRefactor this method to reduce its Cognitive Complexity from 17 to the 15 allowed.(—×·‚8Šá·‡2
+wcsharpsquid:S3776£"RRefactor this method to reduce its Cognitive Complexity from 25 to the 15 allowed.(ïå¤«8Œá·‡2
+Šcsharpsquid:S2971“"eDrop this useless call to 'ToList' or replace it by 'AsEnumerable' if you are using LINQ to Entities.(ıã‚®8á·‡2
+Šcsharpsquid:S2971š"eDrop this useless call to 'ToList' or replace it by 'AsEnumerable' if you are using LINQ to Entities.(ıã‚®8á·‡2
+ccsharpsquid:S1854Q":Remove this useless assignment to local variable 'dishes'.(Òš®Îüÿÿÿÿ8á·‡2
+ecsharpsquid:S1854P"<Remove this useless assignment to local variable 'response'.(±Æ¢êøÿÿÿÿ8á·‡2
+\csharpsquid:S3267ø"2Loops should be simplified with "LINQ" expressions(î‡ìÿÿÿÿÿ8á·‡2
+Wcsharpsquid:S3267ë"2Loops should be simplified with "LINQ" expressions(›¶Ûß8á·‡2

@@ -1,3 +1,6 @@
 
-‡csharpsquid:S4487"^Remove this unread private field '_currentLoginAccount' or refactor the code to use its value.(ØœÀ‚şÿÿÿÿ8‘Öå¿†2
-Bcsharpsquid:S125'"Remove this commented out code.(ÿ·»Š8‘Öå¿†2
+Scsharpsquid:S1125:"*Remove the unnecessary Boolean literal(s).(¬¾çüÿÿÿÿ8Å¹ÆÁ‡2
+Lcsharpsquid:S2971›""Use 'Count' property here instead.(ˆİÒœúÿÿÿÿ8”âÕÁ‡2
+Scsharpsquid:S2259±"/'order' is null on at least one execution path.(¸Åá8Çô†Í‡2
+‡csharpsquid:S4487"^Remove this unread private field '_currentLoginAccount' or refactor the code to use its value.(ØœÀ‚şÿÿÿÿ8½Â½Ê‡2
+Bcsharpsquid:S125*"Remove this commented out code.(ÿ·»Š8Æ¹ÆÁ‡2

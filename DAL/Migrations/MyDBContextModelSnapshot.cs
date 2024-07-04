@@ -60,7 +60,7 @@ namespace DAL.Migrations
                     b.HasIndex("Email")
                         .IsUnique();
 
-                    b.ToTable("Accounts");
+                    b.ToTable("Accounts", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.Dish", b =>
@@ -90,7 +90,7 @@ namespace DAL.Migrations
 
                     b.HasKey("DishID");
 
-                    b.ToTable("Dishes");
+                    b.ToTable("Dishes", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.DishTag", b =>
@@ -114,7 +114,7 @@ namespace DAL.Migrations
                     b.HasIndex("DishID", "TagID")
                         .IsUnique();
 
-                    b.ToTable("DishTags");
+                    b.ToTable("DishTags", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.Order", b =>
@@ -147,7 +147,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("AccountID");
 
-                    b.ToTable("Orders");
+                    b.ToTable("Orders", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.OrderDetail", b =>
@@ -176,7 +176,7 @@ namespace DAL.Migrations
 
                     b.HasIndex("OrderID");
 
-                    b.ToTable("OrderDetails");
+                    b.ToTable("OrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.Tag", b =>
@@ -199,7 +199,7 @@ namespace DAL.Migrations
 
                     b.HasKey("TagID");
 
-                    b.ToTable("Tags");
+                    b.ToTable("Tags", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.Transaction", b =>
@@ -240,7 +240,7 @@ namespace DAL.Migrations
                     b.HasIndex("OrderID")
                         .IsUnique();
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("DAL.Entities.DishTag", b =>

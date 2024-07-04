@@ -1,6 +1,7 @@
 ﻿using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
+using System.Reflection;
 
 namespace DAL.Repositories.Implementations
 {
@@ -94,6 +95,10 @@ namespace DAL.Repositories.Implementations
             {
                 await context.AddRangeAsync(entities);
             }
+        }
+        public IQueryable<TEntity> GetQueryable()
+        {
+            return dbSet;
         }
     }
 }

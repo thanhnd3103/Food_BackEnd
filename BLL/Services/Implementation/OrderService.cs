@@ -13,6 +13,7 @@ using DAL.Entities;
 using DAL.Repositories;
 using System.Net;
 using Common.ResponseObjects.Pagination;
+using Microsoft.EntityFrameworkCore;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -165,12 +166,11 @@ public class OrderService : IOrderService
 
     public ResponseObject GetOrderDetailByOrderId(int orderId)
     {
-        var order = _unitOfWork.OrderRepository.Get(filter: x => x.OrderID == orderId,
-            includeProperties: new Expression<Func<Order, object>>[]
-            {
-                o => o.Account,
-                o => o.OrderDetails.Select(od => od.Dish)
-            })
+        var order = _unitOfWork.OrderRepository.GetQueryable()
+            .Where(x => x.OrderID == orderId)
+            .Include(x => x.Account)
+            .Include(x => x.OrderDetails)
+            .ThenInclude(od => od.Dish)
             .FirstOrDefault();
         var response = _mapper.Map<OrderDetailResponse>(order);
         List<OrderDishResponse> dishOrderResponse = new List<OrderDishResponse>();

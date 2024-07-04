@@ -16,5 +16,6 @@ namespace DAL.Repositories.Interfaces
         void Delete(TEntity entityToDelete);
         TEntity Update(TEntity entityToUpdate);
         Task BulkInsertAsync(IEnumerable<TEntity> entities);
+        IQueryable<TEntity> GetQueryable();
     }
 }

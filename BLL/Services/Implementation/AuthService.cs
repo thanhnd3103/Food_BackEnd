@@ -4,6 +4,7 @@ using BLL.Utilities.JWTHelper;
 using Common.Constants;
 using Common.RequestObjects.AuthController;
 using Common.ResponseObjects;
+using Common.ResponseObjects.Auth;
 using DAL.Entities;
 using DAL.Repositories;
 
@@ -73,7 +74,11 @@ namespace BLL.Services.Implementation
                     {
                         StatusCode = System.Net.HttpStatusCode.OK,
                         Message = Messages.AuthController.LOGIN_SUCCESS,
-                        Result = _jwtHelper.CreateToken(loginAccount)
+                        Result = new LoginResponse
+                        {
+                            Token = _jwtHelper.CreateToken(loginAccount),
+                            IsAdmin = loginAccount.IsAdmin,
+                        }
                     };
                 }
 

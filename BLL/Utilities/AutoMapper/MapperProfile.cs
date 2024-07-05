@@ -30,7 +30,8 @@ namespace BLL.Utilities.AutoMapper
             CreateMap<OrderDetail, OrderDishResponse>()
                 .ForMember(dest => dest.DishName, opt => opt.MapFrom(src => src.Dish.Name))
                 .ForMember(dest => dest.Price, opt => opt.MapFrom(src => src.Price))
-                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity));
+                .ForMember(dest => dest.Quantity, opt => opt.MapFrom(src => src.Quantity))
+                .ForMember(dest => dest.ImageUrl, opt => opt.MapFrom(src => src.Dish.ImageUrl));
 
             CreateMap<Order, OrderDetailResponse>()
                 .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));

@@ -43,13 +43,14 @@
         public static class AccountMessage
         {
             public const string GET_ACCOUNT_BY_ID_SUCCESS = "Trả về dữ liệu của người dùng thnh công";
+            public const string UPDATE_ACCOUNT_SUCCESS = "Cập nhật dữ liệu người dùng thành công";
         }
 
         public static class TagMessage
         {
             public const string GET_TAGS_SUCCESS = "Dữ liệu của tags";
         }
-        
+
         public static class OrderDetailMessage
         {
             public const string GET_ORDER_DETAIL_BY_ID_SUCCESS = "Dữ liệu order detail";

@@ -1,4 +1,6 @@
 using BLL.Services.Interfaces;
+using Common.RequestObjects.Account;
+using Common.ResponseObjects.Account;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Security.Claims;
@@ -29,5 +31,14 @@ public class AccountController : ControllerBase
     {
         var accountId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
         return _accountService.GetAccountById(Int32.Parse(accountId!));
+    }
+
+    [HttpPut]
+    [Authorize]
+    [ProducesResponseType(typeof(AccountResponse), 200)]
+    public ActionResult<object> UpdateCurrentAccountInfo(UpdateAccountRequest request)
+    {
+        var accountId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
+        return _accountService.UpdateAccount(request, Int32.Parse(accountId!));
     }
 }

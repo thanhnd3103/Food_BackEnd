@@ -174,6 +174,13 @@ public class OrderService : IOrderService
             .Include(x => x.OrderDetails)
             .ThenInclude(od => od.Dish)
             .FirstOrDefault();
+        if (order is null)
+            return new ResponseObject()
+            {
+                Result = null,
+                Message = Messages.OrderMessage.GET_ORDER_FAIL,
+                StatusCode = HttpStatusCode.BadRequest
+            };
         var response = _mapper.Map<OrderDetailResponse>(order);
         List<OrderDishResponse> dishOrderResponse = new List<OrderDishResponse>();
         foreach (var orderDetail in order.OrderDetails)

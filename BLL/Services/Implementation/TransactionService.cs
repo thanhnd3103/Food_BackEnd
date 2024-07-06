@@ -1,4 +1,3 @@
-using System.Net;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using Common.Constants;
@@ -7,6 +6,7 @@ using Common.ResponseObjects;
 using Common.ResponseObjects.Transaction;
 using Common.Status;
 using DAL.Repositories;
+using System.Net;
 
 namespace BLL.Services.Implementation;
 
@@ -39,7 +39,7 @@ public class TransactionService : ITransactionService
             var response = _mapper.Map<TransactionResponse>(transaction);
             return new ResponseObject()
             {
-                StatusCode = HttpStatusCode.BadRequest,
+                StatusCode = HttpStatusCode.OK,
                 Result = response,
                 Message = Messages.TransactionMessage.UPDATE_TRANSACTION_SUCCESS
             };

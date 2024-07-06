@@ -39,6 +39,7 @@
             public const string ORDER_SUCCESS = "Tạo order thành công";
             public const string LIST_ORDER_SUCCESS = "List orders của nhà hàng";
             public const string GET_ORDER_FAIL = "Không tìm thấy order";
+            public const string UPDATE_ORDER_SUCCESS = "Cập nhật order thành công";
         }
 
         public static class AccountMessage
@@ -56,7 +57,7 @@
         {
             public const string GET_ORDER_DETAIL_BY_ID_SUCCESS = "Dữ liệu order detail";
         }
-        
+
         public static class TransactionMessage
         {
             public const string GET_TRANSACTION_BY_ORDER_ID = "Không tìm thấy lịc sử giao dịch dựa trên order id này";

@@ -5,6 +5,7 @@ using Common.ResponseObjects.Account;
 using Common.ResponseObjects.Dish;
 using Common.ResponseObjects.Order;
 using Common.ResponseObjects.Tag;
+using Common.ResponseObjects.Transaction;
 using DAL.Entities;
 
 namespace BLL.Utilities.AutoMapper
@@ -35,6 +36,7 @@ namespace BLL.Utilities.AutoMapper
 
             CreateMap<Order, OrderDetailResponse>()
                 .ForMember(dest => dest.Account, opt => opt.MapFrom(src => src.Account));
+            CreateMap<Transaction, TransactionResponse>();
         }
     }
 }

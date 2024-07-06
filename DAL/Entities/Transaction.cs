@@ -13,8 +13,7 @@ namespace DAL.Entities
         public int TransactionID { get; set; }
 
         public string? BankCode { get; set; }
-        public int? Txn_ref { get; set; }
-
+        
         [Required]
         public decimal TotalPrice { get; set; }
         [Required]

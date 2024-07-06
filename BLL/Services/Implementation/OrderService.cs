@@ -1,4 +1,3 @@
-using System.Linq.Expressions;
 using AutoMapper;
 using BLL.Services.Interfaces;
 using BLL.Utilities.LoginAccount.Interface;
@@ -7,13 +6,13 @@ using Common.RequestObjects.Order;
 using Common.ResponseObjects;
 using Common.ResponseObjects.Dish;
 using Common.ResponseObjects.Order;
+using Common.ResponseObjects.Pagination;
 using Common.Status;
 using Common.Utils;
 using DAL.Entities;
 using DAL.Repositories;
-using System.Net;
-using Common.ResponseObjects.Pagination;
 using Microsoft.EntityFrameworkCore;
+using System.Net;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -144,17 +143,20 @@ public class OrderService : IOrderService
         // Get orders by paging
         var orders = _unitOfWork.OrderRepository.Get(
             filter: x => x.IsSuccess == false && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
-            includeProperties: x => x.Account,
+            includeProperties: [x => x.Account, x => x.Transaction],
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,
             takeCount: request.PageSize
         ).ToList();
 
+        var ordersToGetTotalPage = _unitOfWork.OrderRepository.Get(
+            filter: x => x.IsSuccess == false && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
+
         var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
         var response = new PaginationResponse()
         {
             Items = ordersMappers,
-            TotalPage = (int)Math.Ceiling((decimal)ordersMappers.Count() / request.PageSize),
+            TotalPage = (int)Math.Ceiling((decimal)ordersToGetTotalPage.Count() / request.PageSize),
             PageSize = request.PageSize,
             PageNumber = request.PageNumber,
         };
@@ -194,6 +196,45 @@ public class OrderService : IOrderService
         {
             Result = response,
             Message = Messages.OrderDetailMessage.GET_ORDER_DETAIL_BY_ID_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+    }
+
+    public ResponseObject UpdateIsSuccessActiveOrder(int orderId)
+    {
+        var order = _unitOfWork.OrderRepository!.GetByID(orderId);
+        if (order == null)
+        {
+            return new ResponseObject()
+            {
+                Result = null,
+                Message = Messages.General.NO_DATA_ERROR,
+                StatusCode = HttpStatusCode.NoContent,
+            };
+        }
+        order.IsSuccess = true;
+        _unitOfWork.OrderRepository!.Update(order);
+        return new ResponseObject()
+        {
+            Result = null,
+            Message = Messages.OrderMessage.UPDATE_ORDER_SUCCESS,
+            StatusCode = HttpStatusCode.OK
+        };
+
+    }
+
+    public ResponseObject GetCurrentUserOrders(string userId)
+    {
+        var orders = _unitOfWork.OrderRepository.Get(
+            filter: x => x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
+            includeProperties: [x => x.Account, x => x.Transaction],
+            orderBy: x => x.OrderBy(p => p.BookingTime)
+        ).ToList();
+        var response = _mapper.Map<List<OrderResponse>>(orders);
+        return new ResponseObject()
+        {
+            Result = response,
+            Message = Messages.OrderMessage.LIST_ORDER_SUCCESS,
             StatusCode = HttpStatusCode.OK
         };
     }

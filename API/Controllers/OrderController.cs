@@ -53,4 +53,22 @@ public class OrderController : ControllerBase
         var response = _orderService.GetOrderDetailByOrderId(orderId);
         return response;
     }
+    [HttpPut("/orders/{orderId}")]
+    [Authorize(Roles = "Admin")]
+    [SwaggerOperation(Summary = "Update an order's success status to TRUE")]
+    public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId)
+    {
+        return _orderService.UpdateIsSuccessActiveOrder(orderId);
+    }
+
+    [HttpGet("/orders/current")]
+    [Authorize]
+    [SwaggerOperation(Summary = "Get all PAID orders of current logged in user")]
+    public ActionResult<object> GetCurrentUserOrders()
+    {
+        var userId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;
+        return _orderService.GetCurrentUserOrders(userId);
+    }
+
+
 }

@@ -112,7 +112,7 @@ public class DishService : IDishService
             {
                 case Meal.Breakfast:
                     switchTag = _unitOfWork.TagRepository!
-                        .Get(filter: tag => tag.Name.Contains("trưa") || tag.Name.Contains("Lunch"))
+                        .Get(filter: tag => tag.Name.Contains("sáng") || tag.Name.Contains("Morning"))
                         .ToList().FirstOrDefault()!;
 
                     break;
@@ -146,6 +146,8 @@ public class DishService : IDishService
             includeProperties: dish => dish.DishTags
         ).ToList();
 
+        var dishesToGetTotalPage = _unitOfWork.DishRepository!.Get(filter: filter, includeProperties: dish => dish.DishTags).ToList();
+
         response = _mapper.Map<List<DishResponse>>(dishes);
 
         return new ResponseObject
@@ -153,7 +155,7 @@ public class DishService : IDishService
             Result = new PaginationResponse
             {
                 Items = response,
-                TotalPage = (int)Math.Ceiling((decimal)response.Count() / getDishesRequest.PageSize),
+                TotalPage = (int)Math.Ceiling((decimal)dishesToGetTotalPage.Count() / getDishesRequest.PageSize),
                 PageSize = getDishesRequest.PageSize,
                 PageNumber = getDishesRequest.PageNumber,
             },

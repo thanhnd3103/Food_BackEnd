@@ -11,4 +11,5 @@ public interface IDishService
     public ResponseObject CreateDish(CreateDishRequest createDishRequest);
     public ResponseObject RandomDish(Meal meal);
     public ResponseObject UpdateDish(UpdateDishRequest request);
+    public ResponseObject GetDishesHomePage();
 }

@@ -28,6 +28,14 @@ public class DishController : ControllerBase
         var response = _dishService.GetDishes(getDishesRequest);
         return response;
     }
+    [HttpGet("home")]
+    [Authorize]
+    [SwaggerOperation(Summary = "Return first 5 latest dishes")]
+    public ActionResult<object> GetDishesHomePage()
+    {
+        var response = _dishService.GetDishesHomePage();
+        return response;
+    }
 
     [HttpGet("{id}")]
     [Authorize]

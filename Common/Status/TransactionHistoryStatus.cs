@@ -4,5 +4,6 @@ public enum TransactionHistoryStatus
 {
     NOTPAID,
     PAID,
-    CANCELED
+    CANCELED,
+    ERROR
 }

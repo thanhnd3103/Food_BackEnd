@@ -56,5 +56,12 @@
         {
             public const string GET_ORDER_DETAIL_BY_ID_SUCCESS = "Dữ liệu order detail";
         }
+        
+        public static class TransactionMessage
+        {
+            public const string GET_TRANSACTION_BY_ORDER_ID = "Không tìm thấy lịc sử giao dịch dựa trên order id này";
+            public const string UPDATE_TRANSACTION_FAIL = "Lỗi trong lúc thực hiện chuyển tiền";
+            public const string UPDATE_TRANSACTION_SUCCESS = "Trả tiền thành công";
+        }
     }
 }

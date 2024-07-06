@@ -143,7 +143,7 @@ public class OrderService : IOrderService
     {
         // Get orders by paging
         var orders = _unitOfWork.OrderRepository.Get(
-            filter: x => x.IsSuccess == false,
+            filter: x => x.IsSuccess == false && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
             includeProperties: x => x.Account,
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,

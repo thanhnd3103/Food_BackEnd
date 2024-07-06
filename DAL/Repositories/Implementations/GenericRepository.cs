@@ -1,7 +1,6 @@
 ﻿using DAL.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System.Linq.Expressions;
-using System.Reflection;
 
 namespace DAL.Repositories.Implementations
 {
@@ -17,7 +16,7 @@ namespace DAL.Repositories.Implementations
         }
 
         //EXAMPLE ORDERBY : orderBy: q => q.OrderBy(d => d.Name)
-        public   IEnumerable<TEntity> Get(
+        public IEnumerable<TEntity> Get(
             Expression<Func<TEntity, bool>>? filter = null,
             Func<IQueryable<TEntity>, IOrderedQueryable<TEntity>>? orderBy = null,
             int? skipCount = 0,
@@ -26,10 +25,6 @@ namespace DAL.Repositories.Implementations
         {
             IQueryable<TEntity> query = dbSet;
 
-            if (filter != null)
-            {
-                query = query.Where(filter);
-            }
             if (includeProperties != null)
             {
                 foreach (var includeProperty in includeProperties)
@@ -37,6 +32,11 @@ namespace DAL.Repositories.Implementations
                     query = query.Include(includeProperty);
                 }
             }
+            if (filter != null)
+            {
+                query = query.Where(filter);
+            }
+
             if (orderBy != null)
             {
                 query = orderBy(query);

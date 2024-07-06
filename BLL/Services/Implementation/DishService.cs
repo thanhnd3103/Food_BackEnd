@@ -105,12 +105,45 @@ public class DishService : IDishService
                 ? dish => dish.Price >= getDishesRequest.MinPrice.Value
                 : filter.And(dish => dish.Price >= getDishesRequest.MinPrice.Value);
         }
+        if (getDishesRequest.Meal.HasValue)
+        {
+            Tag switchTag = new Tag();
+            switch (getDishesRequest.Meal)
+            {
+                case Meal.Breakfast:
+                    switchTag = _unitOfWork.TagRepository!
+                        .Get(filter: tag => tag.Name.Contains("trưa") || tag.Name.Contains("Lunch"))
+                        .ToList().FirstOrDefault()!;
 
+                    break;
+                case Meal.Lunch:
+                    switchTag = _unitOfWork.TagRepository!
+                        .Get(filter: tag => tag.Name.Contains("trưa") || tag.Name.Contains("Lunch"))
+                        .ToList().FirstOrDefault()!;
+                    break;
+                case Meal.Dinner:
+                    switchTag = _unitOfWork.TagRepository!
+                        .Get(filter: tag => tag.Name.Contains("tối") || tag.Name.Contains("Dinner"))
+                        .ToList().FirstOrDefault()!;
+                    break;
+                default:
+                    break;
+            }
+            if (switchTag != null)
+            {
+                filter = filter == null
+                    ? (dish => dish.DishTags.Any(dishTag => dishTag.TagID == switchTag.TagID))
+                    : filter.And(dish => dish.DishTags.Any(dishTag => dishTag.TagID == switchTag.TagID));
+            }
+
+
+        }
         // Call the Get method
         dishes = _unitOfWork.DishRepository!.Get(
             filter: filter,
             skipCount: (getDishesRequest.PageNumber - 1) * getDishesRequest.PageSize,
-            takeCount: getDishesRequest.PageSize
+            takeCount: getDishesRequest.PageSize,
+            includeProperties: dish => dish.DishTags
         ).ToList();
 
         response = _mapper.Map<List<DishResponse>>(dishes);
@@ -127,6 +160,18 @@ public class DishService : IDishService
             StatusCode = HttpStatusCode.OK,
             Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS
         };
+    }
+    public ResponseObject GetDishesHomePage()
+    {
+        var dishes = _unitOfWork.DishRepository!.Get(orderBy: q => q.OrderByDescending(dish => dish.DishID),
+                                                    takeCount: 5);
+        return new ResponseObject
+        {
+            StatusCode = HttpStatusCode.OK,
+            Message = Messages.DishMessage.LIST_DISHES_MESSAGE_SUCCESS,
+            Result = _mapper.Map<List<DishResponse>>(dishes),
+        };
+
     }
     public ResponseObject RandomDish(Meal meal)
     {

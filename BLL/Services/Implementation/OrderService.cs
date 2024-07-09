@@ -226,7 +226,7 @@ public class OrderService : IOrderService
     public ResponseObject GetCurrentUserOrders(string userId)
     {
         var orders = _unitOfWork.OrderRepository.Get(
-            filter: x => x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
+            filter: x => x.Transaction.Status.Equals(TransactionHistoryStatus.PAID) && x.Account.AccountID == Int32.Parse(userId),
             includeProperties: [x => x.Account, x => x.Transaction],
             orderBy: x => x.OrderBy(p => p.BookingTime)
         ).ToList();

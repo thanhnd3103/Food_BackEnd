@@ -21,7 +21,6 @@ namespace DAL.Entities
 
         [Required]
         public string FullName { get; set; }
-
         [Required]
         public string Address { get; set; }
         [Required]

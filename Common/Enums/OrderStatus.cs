@@ -3,7 +3,7 @@ namespace Common.Enums;
 public enum OrderStatus
 {
     CREATED,
-    REPAIRED,
+    PREPARED,
     SHIPPED,
     SUCCEEDED,
     CANCELLED

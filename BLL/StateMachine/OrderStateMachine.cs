@@ -12,10 +12,10 @@ public class OrderStateMachine
         _stateMachine = new StateMachine<OrderStatus, OrderEvent>(initialState);
 
         _stateMachine.Configure(OrderStatus.CREATED)
-            .Permit(OrderEvent.PROCESS, OrderStatus.REPAIRED)
+            .Permit(OrderEvent.PROCESS, OrderStatus.PREPARED)
             .Permit(OrderEvent.CANCEL, OrderStatus.CANCELLED);
 
-        _stateMachine.Configure(OrderStatus.REPAIRED)
+        _stateMachine.Configure(OrderStatus.PREPARED)
             .Permit(OrderEvent.SHIP, OrderStatus.SHIPPED);
 
         _stateMachine.Configure(OrderStatus.SHIPPED)

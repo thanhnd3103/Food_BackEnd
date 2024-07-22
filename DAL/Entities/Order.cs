@@ -1,6 +1,7 @@
 ﻿using DAL.Entities.Interfaces;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Common.Enums;
 
 namespace DAL.Entities
 {
@@ -18,7 +19,11 @@ namespace DAL.Entities
         [ForeignKey(nameof(Account))]
         public int AccountID { get; set; }
         [Required]
-        public bool IsSuccess { get; set; } = false;
+        public OrderStatus Status { get; set; }
+        [Required] 
+        public DateTime CreatedAt { get; set; }
+        [Required] 
+        public DateTime LastModified { get; set; }
         public virtual Account Account { get; set; }
         public virtual Transaction Transaction { get; set; }
         public virtual ICollection<OrderDetail> OrderDetails { get; set; }

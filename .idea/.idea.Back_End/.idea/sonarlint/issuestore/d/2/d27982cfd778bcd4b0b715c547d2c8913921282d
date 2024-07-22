@@ -1,6 +1,6 @@
 
-Scsharpsquid:S1125:"*Remove the unnecessary Boolean literal(s).(¬¾çüÿÿÿÿ8˜ÔÏ…ˆ2
-Tcsharpsquid:S1125’"*Remove the unnecessary Boolean literal(s).(·Ê›”şÿÿÿÿ8˜ÔÏ…ˆ2
-Lcsharpsquid:S2971""Use 'Count' property here instead.(ˆİÒœúÿÿÿÿ8™ÔÏ…ˆ2
-‡csharpsquid:S4487"^Remove this unread private field '_currentLoginAccount' or refactor the code to use its value.(ØœÀ‚şÿÿÿÿ8™ÔÏ…ˆ2
-Bcsharpsquid:S125*"Remove this commented out code.(ÿ·»Š8™ÔÏ…ˆ2
+Scsharpsquid:S11259"*Remove the unnecessary Boolean literal(s).(¬¾çüÿÿÿÿ8ÉÈÆ§2
+Ocsharpsquid:S1125‘"*Remove the unnecessary Boolean literal(s).(•ï–’8ÊÈÆ§2
+Tcsharpsquid:S1125™"*Remove the unnecessary Boolean literal(s).(š‘Úßıÿÿÿÿ8ÊÈÆ§2
+‡csharpsquid:S4487"^Remove this unread private field '_currentLoginAccount' or refactor the code to use its value.(ØœÀ‚şÿÿÿÿ8ËÈÆ§2
+Bcsharpsquid:S125)"Remove this commented out code.(ÿ·»Š8ÌÈÆ§2

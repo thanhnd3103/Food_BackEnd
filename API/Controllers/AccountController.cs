@@ -7,7 +7,7 @@ using System.Security.Claims;
 
 namespace API.Controllers;
 
-[Route("/api/[controller]")]
+[Route("api/")]
 [ApiController]
 public class AccountController : ControllerBase
 {
@@ -18,14 +18,14 @@ public class AccountController : ControllerBase
         _accountService = accountService;
     }
 
-    [HttpGet("/{accountId}")]
+    [HttpGet("accounts/{accountId}")]
     [Authorize]
     public ActionResult<object> GetAccountById(int accountId)
     {
         var response = _accountService.GetAccountById(accountId);
         return response;
     }
-    [HttpGet("current")]
+    [HttpGet("accounts/current")]
     [Authorize]
     public ActionResult<object> GetCurrentAccountInfo()
     {
@@ -33,7 +33,7 @@ public class AccountController : ControllerBase
         return _accountService.GetAccountById(Int32.Parse(accountId!));
     }
 
-    [HttpPut]
+    [HttpPut("accounts")]
     [Authorize]
     [ProducesResponseType(typeof(AccountResponse), 200)]
     public ActionResult<object> UpdateCurrentAccountInfo(UpdateAccountRequest request)

@@ -16,10 +16,7 @@ public class OrderStateMachine
             .Permit(OrderEvent.CANCEL, OrderStatus.CANCELLED);
 
         _stateMachine.Configure(OrderStatus.PREPARED)
-            .Permit(OrderEvent.SHIP, OrderStatus.SHIPPED);
-
-        _stateMachine.Configure(OrderStatus.SHIPPED)
-            .Permit(OrderEvent.DELIVER, OrderStatus.SUCCEEDED);
+            .Permit(OrderEvent.SHIP, OrderStatus.SUCCEEDED);
     }
 
     public OrderStatus CurrentState => _stateMachine.State;

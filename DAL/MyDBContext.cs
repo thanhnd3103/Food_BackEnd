@@ -1,4 +1,5 @@
-﻿using Common.Status;
+﻿using Common.Enums;
+using Common.Status;
 using Common.Utils;
 using DAL.Entities;
 using DAL.Interceptors;
@@ -73,6 +74,11 @@ namespace DAL
                 .Entity<Transaction>()
                 .Property(e => e.Status)
                 .HasConversion(new EnumToStringConverter<TransactionHistoryStatus>());
+            
+            modelBuilder
+                .Entity<Order>()
+                .Property(e => e.Status)
+                .HasConversion(new EnumToStringConverter<OrderStatus>());
 
             foreach (var entityType in modelBuilder.Model.GetEntityTypes())
             {

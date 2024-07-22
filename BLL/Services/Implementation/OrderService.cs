@@ -154,7 +154,7 @@ public class OrderService : IOrderService
         ).ToList();
 
         var ordersToGetTotalPage = _unitOfWork.OrderRepository.Get(
-            filter: x => x.Status.Equals(OrderStatus.SUCCEEDED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
+            filter: x => x.Status.Equals(OrderStatus.REPAIRED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
 
         var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
         var response = new PaginationResponse()

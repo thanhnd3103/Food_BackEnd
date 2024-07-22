@@ -146,7 +146,7 @@ public class OrderService : IOrderService
     {
         // Get orders by paging
         var orders = _unitOfWork.OrderRepository.Get(
-            filter: x => x.Status.Equals(OrderStatus.SUCCEEDED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
+            filter: x => x.Status.Equals(OrderStatus.REPAIRED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
             includeProperties: [x => x.Account, x => x.Transaction],
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,

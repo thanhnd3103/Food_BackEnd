@@ -131,3 +131,7 @@ a
 1Common/ResponseObjects/Order/OrderDishResponse.cs,9\f\9f11c9e6c24b17648b68fd614d1d8535c06c952b
 _
 /Common/RequestObjects/Order/GetOrdersRequest.cs,3\c\3c249335198d4d0de1e1f6dd3b92ebddaedf38f5
+D
+Common/Enums/Meal.cs,e\a\eaefb562e15fc7f4fc79c8e103db586067595c2f
+X
+(API/Controllers/TransactionController.cs,8\8\88c310bdf0e93a396998d96ac6fe307ce763756c

@@ -5,7 +5,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/")]
 public class TagController : ControllerBase
 {
     private readonly ITagService _tagService;
@@ -15,7 +15,7 @@ public class TagController : ControllerBase
         _tagService = tagService;
     }
 
-    [HttpGet("/tags")]
+    [HttpGet("tags")]
     [SwaggerOperation(Summary = "Get all tag available")]
     public ActionResult<object> GetTags()
     {
@@ -23,7 +23,7 @@ public class TagController : ControllerBase
         return response;
     }
 
-    [HttpGet("/tags/search-by-name")]
+    [HttpGet("tags/search-by-name")]
     [SwaggerOperation(Summary = "Get all tag available by name")]
     public ActionResult<object> GetTagsByName([FromQuery] string tagName)
     {

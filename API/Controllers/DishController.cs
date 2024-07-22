@@ -10,7 +10,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api/[controller]")]
+[Route("api/")]
 public class DishController : ControllerBase
 {
     private readonly IDishService _dishService;
@@ -28,7 +28,7 @@ public class DishController : ControllerBase
         var response = _dishService.GetDishes(getDishesRequest);
         return response;
     }
-    [HttpGet("home")]
+    [HttpGet("dishes/home")]
     [Authorize]
     [SwaggerOperation(Summary = "Return first 5 latest dishes")]
     public ActionResult<object> GetDishesHomePage()
@@ -37,14 +37,14 @@ public class DishController : ControllerBase
         return response;
     }
 
-    [HttpGet("{id}")]
+    [HttpGet("dishes/{id}")]
     [Authorize]
     public ActionResult<object> GetDish([FromRoute] int id)
     {
         return _dishService.GetDish(id);
     }
 
-    [HttpGet("random")]
+    [HttpGet("dishes/random")]
     [Authorize]
     [SwaggerOperation(Summary = "Will return 1 random dish (0 - breakfast, 1 - lunch, 2 - dinner) or none at all")]
     public ActionResult<object> RandomDish([FromQuery] Meal meal)
@@ -53,7 +53,7 @@ public class DishController : ControllerBase
     }
 
 
-    [HttpPost]
+    [HttpPost("dishes")]
     [Authorize(Roles = "Admin")]
     public ActionResult<object> CreateDish([FromForm] CreateDishRequest createDishRequest)
     {
@@ -68,7 +68,7 @@ public class DishController : ControllerBase
         }
         return _dishService.CreateDish(createDishRequest);
     }
-    [HttpPut]
+    [HttpPut("dishes")]
     [Authorize(Roles = "Admin")]
     public ActionResult<object> UpdateDish([FromForm] UpdateDishRequest updateDishRequest)
     {

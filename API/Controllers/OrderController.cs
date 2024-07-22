@@ -11,7 +11,7 @@ using System.Security.Claims;
 namespace API.Controllers;
 
 [ApiController]
-[Route("/api")]
+[Route("api/")]
 public class OrderController : ControllerBase
 {
     private readonly IOrderService _orderService;
@@ -21,7 +21,7 @@ public class OrderController : ControllerBase
         _orderService = orderService;
     }
 
-    [HttpPost("/orders")]
+    [HttpPost("orders")]
     [Authorize]
     [SwaggerOperation(Summary = "Will also create a NOT PAID transaction for this order")]
     public ActionResult<ResponseObject> Order(OrderRequest request)
@@ -38,7 +38,7 @@ public class OrderController : ControllerBase
         return response;
     }
 
-    [HttpGet("/orders")]
+    [HttpGet("orders")]
     [Authorize]
     public ActionResult<object> GetOrders([FromQuery] GetOrdersRequest request)
     {
@@ -46,22 +46,22 @@ public class OrderController : ControllerBase
         return response;
     }
 
-    [HttpGet("/orders/{orderId}")]
+    [HttpGet("orders/{orderId}")]
     [Authorize]
     public ActionResult<object> GetOrders([FromRoute] int orderId)
     {
         var response = _orderService.GetOrderDetailByOrderId(orderId);
         return response;
     }
-    [HttpPut("/orders/{orderId}")]
+    [HttpPut("orders/{orderId}")]
     [Authorize(Roles = "Admin")]
     [SwaggerOperation(Summary = "Update an order's success status to TRUE")]
-    public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId)
+    public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId, [FromBody] UpdateOrderRequest request)
     {
-        return _orderService.UpdateIsSuccessActiveOrder(orderId);
+        return _orderService.UpdateOrderStatus(orderId, request);
     }
 
-    [HttpGet("/orders/current")]
+    [HttpGet("orders/current")]
     [Authorize]
     [SwaggerOperation(Summary = "Get all PAID orders of current logged in user")]
     public ActionResult<object> GetCurrentUserOrders()

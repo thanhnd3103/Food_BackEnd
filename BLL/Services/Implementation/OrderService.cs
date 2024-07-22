@@ -13,6 +13,8 @@ using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
+using BLL.StateMachine;
+using Common.Enums;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -70,9 +72,11 @@ public class OrderService : IOrderService
             AccountID = int.Parse(userId),
             // Account = _unitOfWork.AccountRepository.Get(x => x.AccountID == int.Parse(userId)).FirstOrDefault(),
             BookingPrice = totalPrice,
-            IsSuccess = false,
+            Status = OrderStatus.CREATED,
             IsDeleted = false,
-            BookingTime = DateTime.Now.SetKindUtc()
+            BookingTime = DateTime.Now.SetKindUtc(),
+            CreatedAt = DateTime.Now.SetKindUtc(),
+            LastModified = DateTime.Now.SetKindUtc()
         };
         // transaction 
         using var transaction = _unitOfWork.BeginTransaction();
@@ -142,7 +146,7 @@ public class OrderService : IOrderService
     {
         // Get orders by paging
         var orders = _unitOfWork.OrderRepository.Get(
-            filter: x => x.IsSuccess == false && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
+            filter: x => x.Status.Equals(OrderStatus.SUCCEEDED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
             includeProperties: [x => x.Account, x => x.Transaction],
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,
@@ -150,7 +154,7 @@ public class OrderService : IOrderService
         ).ToList();
 
         var ordersToGetTotalPage = _unitOfWork.OrderRepository.Get(
-            filter: x => x.IsSuccess == false && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
+            filter: x => x.Status.Equals(OrderStatus.SUCCEEDED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
 
         var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
         var response = new PaginationResponse()
@@ -200,7 +204,7 @@ public class OrderService : IOrderService
         };
     }
 
-    public ResponseObject UpdateIsSuccessActiveOrder(int orderId)
+    public ResponseObject UpdateOrderStatus(int orderId, UpdateOrderRequest request)
     {
         var order = _unitOfWork.OrderRepository!.GetByID(orderId);
         if (order == null)
@@ -212,7 +216,14 @@ public class OrderService : IOrderService
                 StatusCode = HttpStatusCode.NoContent,
             };
         }
-        order.IsSuccess = true;
+
+        var stateMachine = new OrderStateMachine(order.Status);
+        stateMachine.Fire(request.OrderEvent);
+        
+        //update order
+        order.Status = stateMachine.CurrentState;
+        order.LastModified = DateTime.Now.SetKindUtc();
+        
         _unitOfWork.OrderRepository!.Update(order);
         return new ResponseObject()
         {

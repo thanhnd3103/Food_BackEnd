@@ -7,7 +7,7 @@ using System.Net;
 
 namespace API.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/")]
     [ApiController]
     public class AuthController : ControllerBase
     {

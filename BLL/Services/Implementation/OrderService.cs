@@ -145,16 +145,16 @@ public class OrderService : IOrderService
     public ResponseObject GetOrders(GetOrdersRequest request)
     {
         // Get orders by paging
-        var orders = _unitOfWork.OrderRepository.Get(
-            filter: x => x.Status.Equals(OrderStatus.REPAIRED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID),
+        var orders = _unitOfWork.OrderRepository!.Get(
+            filter: x => x.Status == OrderStatus.PREPARED && x.Transaction.Status == TransactionHistoryStatus.PAID,
             includeProperties: [x => x.Account, x => x.Transaction],
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,
             takeCount: request.PageSize
-        ).ToList();
+        ); 
 
         var ordersToGetTotalPage = _unitOfWork.OrderRepository.Get(
-            filter: x => x.Status.Equals(OrderStatus.REPAIRED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
+            filter: x => x.Status.Equals(OrderStatus.PREPARED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
 
         var ordersMappers = _mapper.Map<List<OrderResponse>>(orders);
         var response = new PaginationResponse()

@@ -59,7 +59,20 @@ public class OrderController : ControllerBase
     public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId, [FromBody] UpdateOrderRequest request)
     {
         var (response, accountId) = _orderService.UpdateOrderStatus(orderId, request);
-        if (response.StatusCode == HttpStatusCode.OK)
+        if (response.StatusCode == HttpStatusCode.OK && request.OrderEvent == Common.Enums.OrderEvent.PROCESS)
+        {
+            var message = new Message()
+            {
+                Topic = "news",
+                Notification = new Notification()
+                {
+                    Title = $"{accountId}:Order {orderId}",
+                    Body = "Your order is being prepared"
+                }
+            };
+            _ = FirebaseMessaging.DefaultInstance.SendAsync(message);
+        }
+        if (response.StatusCode == HttpStatusCode.OK && request.OrderEvent == Common.Enums.OrderEvent.SHIP)
         {
             var message = new Message()
             {
@@ -77,7 +90,6 @@ public class OrderController : ControllerBase
 
     [HttpGet("orders/current")]
     [Authorize]
-    [SwaggerOperation(Summary = "Get all PAID orders of current logged in user")]
     public ActionResult<object> GetCurrentUserOrders()
     {
         var userId = HttpContext.User.FindFirst(ClaimTypes.Sid)?.Value;

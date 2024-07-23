@@ -226,6 +226,14 @@ public class OrderService : IOrderService
         order.LastModified = DateTime.Now.SetKindUtc();
 
         _unitOfWork.OrderRepository!.Update(order);
+
+        if (request.OrderEvent == OrderEvent.PROCESS)
+        {
+            var transaction = _unitOfWork.TransactionRepository!.Get(filter: x => x.OrderID == orderId).FirstOrDefault();
+            transaction!.Status = TransactionHistoryStatus.PAID;
+            _unitOfWork.TransactionRepository!.Update(transaction);
+        }
+
         return (new ResponseObject()
         {
             Result = null,

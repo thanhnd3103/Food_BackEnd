@@ -1,7 +1,9 @@
 using AutoMapper;
 using BLL.Services.Interfaces;
+using BLL.StateMachine;
 using BLL.Utilities.LoginAccount.Interface;
 using Common.Constants;
+using Common.Enums;
 using Common.RequestObjects.Order;
 using Common.ResponseObjects;
 using Common.ResponseObjects.Dish;
@@ -13,8 +15,6 @@ using DAL.Entities;
 using DAL.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System.Net;
-using BLL.StateMachine;
-using Common.Enums;
 using Transaction = DAL.Entities.Transaction;
 
 namespace BLL.Services.Implementation;
@@ -151,7 +151,7 @@ public class OrderService : IOrderService
             orderBy: x => x.OrderBy(p => p.BookingTime),
             skipCount: (request.PageNumber - 1) * request.PageSize,
             takeCount: request.PageSize
-        ); 
+        );
 
         var ordersToGetTotalPage = _unitOfWork.OrderRepository.Get(
             filter: x => x.Status.Equals(OrderStatus.PREPARED) && x.Transaction.Status.Equals(TransactionHistoryStatus.PAID));
@@ -204,34 +204,34 @@ public class OrderService : IOrderService
         };
     }
 
-    public ResponseObject UpdateOrderStatus(int orderId, UpdateOrderRequest request)
+    public (ResponseObject, int?) UpdateOrderStatus(int orderId, UpdateOrderRequest request)
     {
-        var order = _unitOfWork.OrderRepository!.GetByID(orderId);
+        var order = _unitOfWork.OrderRepository!.Get(filter: x => x.OrderID == orderId,
+                                                    includeProperties: x => x.Account).FirstOrDefault();
         if (order == null)
         {
-            return new ResponseObject()
+            return (new ResponseObject()
             {
                 Result = null,
                 Message = Messages.General.NO_DATA_ERROR,
                 StatusCode = HttpStatusCode.NoContent,
-            };
+            }, null);
         }
 
         var stateMachine = new OrderStateMachine(order.Status);
         stateMachine.Fire(request.OrderEvent);
-        
+
         //update order
         order.Status = stateMachine.CurrentState;
         order.LastModified = DateTime.Now.SetKindUtc();
-        
+
         _unitOfWork.OrderRepository!.Update(order);
-        return new ResponseObject()
+        return (new ResponseObject()
         {
             Result = null,
             Message = Messages.OrderMessage.UPDATE_ORDER_SUCCESS,
             StatusCode = HttpStatusCode.OK
-        };
-
+        }, order.Account.AccountID);
     }
 
     public ResponseObject GetCurrentUserOrders(string userId)

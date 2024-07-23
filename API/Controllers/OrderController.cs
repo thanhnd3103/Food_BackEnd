@@ -2,6 +2,7 @@ using BLL.Services.Interfaces;
 using Common.Constants;
 using Common.RequestObjects.Order;
 using Common.ResponseObjects;
+using FirebaseAdmin.Messaging;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -55,10 +56,23 @@ public class OrderController : ControllerBase
     }
     [HttpPut("orders/{orderId}")]
     [Authorize(Roles = "Admin")]
-    [SwaggerOperation(Summary = "Update an order's success status to TRUE")]
     public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId, [FromBody] UpdateOrderRequest request)
     {
-        return _orderService.UpdateOrderStatus(orderId, request);
+        var (response, accountId) = _orderService.UpdateOrderStatus(orderId, request);
+        if (response.StatusCode == HttpStatusCode.OK)
+        {
+            var message = new Message()
+            {
+                Topic = "news",
+                Notification = new Notification()
+                {
+                    Title = $"{accountId}:Order {orderId} is finished",
+                    Body = "Your order is on the way"
+                }
+            };
+            _ = FirebaseMessaging.DefaultInstance.SendAsync(message);
+        }
+        return response;
     }
 
     [HttpGet("orders/current")]
@@ -70,5 +84,16 @@ public class OrderController : ControllerBase
         return _orderService.GetCurrentUserOrders(userId);
     }
 
-
+    public class NotificationRequest
+    {
+        public string Token { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+    }
+    public class BroadcastRequest
+    {
+        public string Topic { get; set; }
+        public string Title { get; set; }
+        public string Body { get; set; }
+    }
 }

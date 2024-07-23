@@ -1,4 +1,5 @@
 using Amazon.S3;
+using API.Hubs;
 using BLL.Services.Implementation;
 using BLL.Services.Interfaces;
 using BLL.Utilities.AutoMapper;
@@ -8,6 +9,8 @@ using BLL.Utilities.LoginAccount;
 using BLL.Utilities.LoginAccount.Interface;
 using DAL;
 using DAL.Repositories;
+using FirebaseAdmin;
+using Google.Apis.Auth.OAuth2;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -17,6 +20,11 @@ using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
 var config = builder.Configuration;
+
+FirebaseApp.Create(new AppOptions()
+{
+    Credential = GoogleCredential.FromFile("mykey.json")
+});
 
 // Add services to the container.
 
@@ -106,6 +114,8 @@ builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<ITagService, TagService>();
 builder.Services.AddScoped<ITransactionService, TransactionService>();
 
+builder.Services.AddSignalR();
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -121,5 +131,8 @@ app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
+
+app.MapHub<NotificationHub>("/notificationHub");
+
 
 app.Run();

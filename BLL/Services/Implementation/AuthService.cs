@@ -78,6 +78,7 @@ namespace BLL.Services.Implementation
                         {
                             Token = _jwtHelper.CreateToken(loginAccount),
                             IsAdmin = loginAccount.IsAdmin,
+                            AccountID = loginAccount.AccountID,
                         }
                     };
                 }

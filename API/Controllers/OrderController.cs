@@ -55,7 +55,7 @@ public class OrderController : ControllerBase
         return response;
     }
     [HttpPut("orders/{orderId}")]
-    [Authorize(Roles = "Admin")]
+    [Authorize]
     public ActionResult<object> UpdateSuccessOrder([FromRoute] int orderId, [FromBody] UpdateOrderRequest request)
     {
         var (response, accountId) = _orderService.UpdateOrderStatus(orderId, request);

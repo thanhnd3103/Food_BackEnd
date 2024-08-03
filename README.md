@@ -23,4 +23,4 @@ Simple E-Commerce app intended for restaurant to put up their food with tags, an
 - Open Package Manager Console and use *Update-Database* to create a database
 
 ## 4. Clone the front end repo if you like, which can be found here
-https://github.com/thanhnd3103/PRM392_FE/tree/main
+It is private at the moment. Sorry for the inconvenience.

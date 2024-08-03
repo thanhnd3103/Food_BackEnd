@@ -1,13 +1,13 @@
 {
-  "type": "service_account",
-  "project_id": "hanu-8370b",
-  "private_key_id": "af427e135161cbc4a2c4a429086278413a39dffd",
-  "private_key": "-----BEGIN PRIVATE KEY-----\nMIIEvgIBADANBgkqhkiG9w0BAQEFAASCBKgwggSkAgEAAoIBAQClNGqiMlaMORGF\nZKDa05EpIZm5oHzGxgx3JG9wYjMz/rpkM/IMsDM9lhG4Ut7gvQKmZ/1uFbFjlZX1\nwV9aPrvaCYKEeSqVqte720ulbUn1h9mvWkSxT0wEf+9J0vjXy9+fVP6RvgwDI5Vx\nOoxMSIwhS1OUuVswh93MZHMtAVsyACtaF0qp4f37iOAU3+Fd4xFZMegI8s6FPyD8\nsb+JWSJAht4pJq5jUbXmS42rUnFd7eIxgXwbY67CU8+6F8Pu/doCYZc+AWe7axRQ\nw05oHfJWwnEq9YtQhuyk5sy6EElR2Vwl8jpVmnD75C2D6bysNA0pL5w8X1jZIb20\njD2ZWn/LAgMBAAECggEAAJol3rhxI5kYQAuXUXH32NRk641sb7JP7T+K4wnAl0rV\nlXiFOCXPFMZNKZBHwwfJ7lNdL6/R1onDic2ypj0kxwsviditRna7TC5IvHAnKfKi\nYBI5YaC9uKSCRlq7QrJZGxQgsm5XJ7HeTqAWz+ZV2zCQhIWrB5TA9TEFj4CaQVhH\nlq1srcjGu+gRiBIpr+sBMlG3SIgEve5TZ80oAXKrZHfYPXdyTWU4MLsvrWmmiZZJ\nAYIUnTiKc9bYGFFOoCdRu9xtA7Xxl2NdyTgarPsAMaiPD0Ew20054kIjOSAzw+zp\nEdaLUzyEgKrqW1hIkWkxG3Vy/OrI+zbmFz1Bts4ASQKBgQDVbirJvSsq/+z2USoM\nBeOr3Uz/vY/pxBaILi5hLBDnP1Z3d8inY6dN7/kJ72aB9rIvorASmb0DfmlikN5d\nKboBP/D8by+xr20C3+8aZxwp0J6PfWFr6PkzrFG28HhqXvk8Fe58E7xEbl9IA8vl\nDF/7syYR1T5Iw+nfr3TqtuvIOQKBgQDGJ9U19I0WgvQYoqicnvSWCOfLEngDjhQS\ndiyW6PYZX1jMLAJZJmFJLzAU25Lo7vyICq1MbtB7hoIUte80xofk/xhBHDrTD9+H\nDUKtRz0WyniydxiNz8Iwhpp+N3B6SUJw6+bNAtoPuMvNNY7kQFHFvErGGzjEJvMn\nMP4D+M8gIwKBgQDMWqWBcC0LCOy8k84soN7zSftVyw0miOgCECW8SNMOd6i0zu5C\nx7oDd8f96Uk/GxRVY/IufSFrXPhOteMTVMaSN8ToDxWdjhhUblGj+CIRL30CasyC\n5BjnjxDWlrzVLIZ7L4yfJM5Yv01fyLLLZuPoPgovfPwb8+nUkUzjB64OkQKBgQC5\nHjNQUaOQ+Uviy+qrTtB+bdll3F4kLBJSYPYtEXv/nhSNwTt8X5+ZSC0p/ytS0xk2\nWoslkYzRKYrSoFjVO/dulmXpRd8qmHShbWDyElBev05co2hb61CmFsmzykUY6OHa\nLngS5GwlLeWvUy6ny/LYwJw2UO4KSbz0yw8zVLjjcwKBgAH6Y5574XdVz6Oxa141\nyS+3la/A72FSMMG/pH/+Iw1dNAZYtI0wZqwPWkR050nYtspek0PsPqUre4QeMFbR\nyfiAO3wVev9sLFretd1YIjrvjvGWrmYsGGqzzGoz6MLNQHZaHD+kZjh7RYDmISfX\n1qzLNmdxEnY6w5r3xwFbLSzh\n-----END PRIVATE KEY-----\n",
-  "client_email": "firebase-adminsdk-nyz5z@hanu-8370b.iam.gserviceaccount.com",
-  "client_id": "115344068754352900616",
-  "auth_uri": "https://accounts.google.com/o/oauth2/auth",
-  "token_uri": "https://oauth2.googleapis.com/token",
-  "auth_provider_x509_cert_url": "https://www.googleapis.com/oauth2/v1/certs",
-  "client_x509_cert_url": "https://www.googleapis.com/robot/v1/metadata/x509/firebase-adminsdk-nyz5z%40hanu-8370b.iam.gserviceaccount.com",
-  "universe_domain": "googleapis.com"
+  "type": "secret_contained",
+  "project_id": "secret_contained",
+  "private_key_id": "secret_contained",
+  "private_key": "-----BEGIN PRIVATE KEY-----\secret_contained\nZKDa05EpIZm5oHzGxgx3JG9wYjMz/rpkM/IMsDM9lhG4Ut7gvQKmZ/1uFbFjlZX1\nwV9aPrvaCYKEeSqVqte720ulbUn1h9mvWkSxT0wEf+9J0vjXy9+fVP6RvgwDI5Vx\nOoxMSIwhS1OUuVswh93MZHMtAVsyACtaF0qp4f37iOAU3+Fd4xFZMegI8s6FPyD8\nsb+JWSJAht4pJq5jUbXmS42rUnFd7eIxgXwbY67CU8+6F8Pu/doCYZc+AWe7axRQ\nw05oHfJWwnEq9YtQhuyk5sy6EElR2Vwl8jpVmnD75C2D6bysNA0pL5w8X1jZIb20\njD2ZWn/LAgMBAAECggEAAJol3rhxI5kYQAuXUXH32NRk641sb7JP7T+K4wnAl0rV\nlXiFOCXPFMZNKZBHwwfJ7lNdL6/R1onDic2ypj0kxwsviditRna7TC5IvHAnKfKi\nYBI5YaC9uKSCRlq7QrJZGxQgsm5XJ7HeTqAWz+ZV2zCQhIWrB5TA9TEFj4CaQVhH\nlq1srcjGu+gRiBIpr+sBMlG3SIgEve5TZ80oAXKrZHfYPXdyTWU4MLsvrWmmiZZJ\nAYIUnTiKc9bYGFFOoCdRu9xtA7Xxl2NdyTgarPsAMaiPD0Ew20054kIjOSAzw+zp\nEdaLUzyEgKrqW1hIkWkxG3Vy/OrI+zbmFz1Bts4ASQKBgQDVbirJvSsq/+z2USoM\nBeOr3Uz/vY/pxBaILi5hLBDnP1Z3d8inY6dN7/kJ72aB9rIvorASmb0DfmlikN5d\nKboBP/D8by+xr20C3+8aZxwp0J6PfWFr6PkzrFG28HhqXvk8Fe58E7xEbl9IA8vl\nDF/7syYR1T5Iw+nfr3TqtuvIOQKBgQDGJ9U19I0WgvQYoqicnvSWCOfLEngDjhQS\ndiyW6PYZX1jMLAJZJmFJLzAU25Lo7vyICq1MbtB7hoIUte80xofk/xhBHDrTD9+H\nDUKtRz0WyniydxiNz8Iwhpp+N3B6SUJw6+bNAtoPuMvNNY7kQFHFvErGGzjEJvMn\nMP4D+M8gIwKBgQDMWqWBcC0LCOy8k84soN7zSftVyw0miOgCECW8SNMOd6i0zu5C\nx7oDd8f96Uk/GxRVY/IufSFrXPhOteMTVMaSN8ToDxWdjhhUblGj+CIRL30CasyC\n5BjnjxDWlrzVLIZ7L4yfJM5Yv01fyLLLZuPoPgovfPwb8+nUkUzjB64OkQKBgQC5\nHjNQUaOQ+Uviy+qrTtB+bdll3F4kLBJSYPYtEXv/nhSNwTt8X5+ZSC0p/ytS0xk2\nWoslkYzRKYrSoFjVO/dulmXpRd8qmHShbWDyElBev05co2hb61CmFsmzykUY6OHa\nLngS5GwlLeWvUy6ny/LYwJw2UO4KSbz0yw8zVLjjcwKBgAH6Y5574XdVz6Oxa141\nyS+3la/A72FSMMG/pH/+Iw1dNAZYtI0wZqwPWkR050nYtspek0PsPqUre4QeMFbR\nyfiAO3wVev9sLFretd1YIjrvjvGWrmYsGGqzzGoz6MLNQHZaHD+kZjh7RYDmISfX\n1qzLNmdxEnY6w5r3xwFbLSzh\n-----END PRIVATE KEY-----\n",
+  "client_email": "secret_contained",
+  "client_id": "secret_contained",
+  "auth_uri": "secret_containedh",
+  "token_uri": "secret_contained",
+  "auth_provider_x509_cert_url": "secret_contained",
+  "client_x509_cert_url": "secret_contained",
+  "universe_domain": "secret_contained"
 }
